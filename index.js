@@ -23,6 +23,8 @@ const pool = mysql.createPool({
 
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
+const staticPath = path.resolve("public");
+app.use(express.static(staticPath));
 
 const dbConnect = () => {
     return new Promise((resolve, reject) => {
@@ -41,13 +43,12 @@ app.get("/", async(req,res) => {
     res.render("home");
 });
 app.get("/login", async(req,res) => {
-    res.render("/login");
+    res.render("login-public");
 });
-app.set("view engine", "ejs");
-app.use(express.urlencoded({ extended: true }));
+app.get("/signup", async(req,res) => {
+    res.render("signup");
+});
 
-const staticPath = path.resolve("public");
-app.use(express.static(staticPath));
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
