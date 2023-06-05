@@ -5,11 +5,26 @@
 body{
     margin: 0px;
 }
-button{
+h1{
+    font-size: 55px;
+}
+::placeholder{
+    color: 6E6E6E;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+/* -------- Home.ejs --------*/
+button, input[type="submit"]{
     background-color: #617A55;
     color: #FFFEF9;
     border-radius: 5px;
     height: 30px;
+}
+button:hover{
+    background-color: #495c40;
+    color: #d4d4d0;
+    transition: 0.3s;
 }
 .hero-section{
     display: flex;
@@ -17,7 +32,7 @@ button{
     align-items: center;
 }
 #hero-title{
-    width: 300px;
+    width: 30vw;
     margin: 0px auto 0px 120px;
 }
 #img-hero{
@@ -74,4 +89,53 @@ button{
     background-color: white;
     border-color: #617A55;
     color: #1E1E1E;
+}
+
+/* ------- signup.ejs ------- */
+.wrapper{
+    display: flex;
+}
+#signup-image{
+    width: 60vw;
+    height: 100vh;
+    object-fit: cover;
+}
+#signup-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
+}
+#signup-content p, #signup-content h1{
+    margin: 3px 0px;
+}
+#go-login{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-style: italic;
+}
+#go-login a{
+    color: #617A55;
+    font-weight: bold;
+}
+#signup-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.signup-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.signup-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
+form input,input[type="submit"]{
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
 }
