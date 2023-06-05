@@ -48,8 +48,18 @@ app.get("/login", async(req,res) => {
 app.get("/signup", async(req,res) => {
     res.render("signup");
 });
+app.get("/dashboard-public", async(req,res) => {
+    res.render("dashboard-public")
+});
+app.post("/auth", async (req, res) => {
+    // terima nama, email, pass, confirm pass
+    const { name, email, password, confirmpassword } = req.body;
+    
+    // validasi database
 
-
+    // redirect ke dashboard public
+    res.redirect("/dashboard-public");
+});
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
 });
