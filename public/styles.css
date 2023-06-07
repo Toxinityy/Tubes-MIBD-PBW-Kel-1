@@ -139,3 +139,43 @@ form input,input[type="submit"]{
     font-size: 14px;
     padding: 0px 10px;
 }
+
+/* ------- login-public.ejs -------- */
+
+#login-public-image{
+    width: 60vw;
+    height: 100vh;
+    object-fit: contain;
+}
+#login-public-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
+}
+#login-public-content p, #login-public-content h1{
+    margin: 3px 0px;
+}
+#go-signup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-style: italic;
+}
+#go-signup a{
+    color: #617A55;
+    font-weight: bold;
+}
+#login-public-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.login-public-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.login-public-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
