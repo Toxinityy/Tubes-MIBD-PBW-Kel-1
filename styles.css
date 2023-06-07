@@ -1,0 +1,181 @@
+*{
+    font-family: 'Roboto', sans-serif;
+    background-color: #FFFEF9;
+}
+body{
+    margin: 0px;
+}
+h1{
+    font-size: 55px;
+}
+::placeholder{
+    color: 6E6E6E;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+/* -------- Home.ejs --------*/
+button, input[type="submit"]{
+    background-color: #617A55;
+    color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+}
+button:hover{
+    background-color: #495c40;
+    color: #d4d4d0;
+    transition: 0.3s;
+}
+.hero-section{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#hero-title{
+    width: 30vw;
+    margin: 0px auto 0px 120px;
+}
+#img-hero{
+    margin: 0px 120px 0px auto;
+    height: 25vw;
+    width: 350px;
+    object-fit: cover;
+}
+#hero-section button{
+    width: 200px;
+}
+#navbar{
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    margin-bottom: 20px;
+}
+#navbar hr{
+    margin: 0px 20px 0px 40px;
+    height: 40px;
+}
+#img-navbar{
+    height: 25px;
+    object-fit: contain;
+    margin: 10px 20px;
+}
+#navbar a{
+    font-weight: 300;
+    font-style: normal;
+    margin-right: 20px;
+    text-decoration: none;
+    color: #1E1E1E;
+
+}
+#navbar span{
+    font-weight: bold;
+}
+#navbar div{
+    display: flex;
+    align-items: center;
+}
+#navbar #navbar-right-feature{
+    margin-left: auto;
+    margin-right: 20px;
+}
+#navbar button{
+    margin: 0px 10px;
+    width: 100px;
+    font-weight: bold;
+}
+#navbar #home-signup{
+    background-color: white;
+    border-color: #617A55;
+    color: #1E1E1E;
+}
+
+/* ------- signup.ejs ------- */
+.wrapper{
+    display: flex;
+}
+#signup-image{
+    width: 60vw;
+    height: 100vh;
+    object-fit: cover;
+}
+#signup-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
+}
+#signup-content p, #signup-content h1{
+    margin: 3px 0px;
+}
+#go-login{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-style: italic;
+}
+#go-login a{
+    color: #617A55;
+    font-weight: bold;
+}
+#signup-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.signup-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.signup-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
+form input,input[type="submit"]{
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+
+/* ------- login-public.ejs -------- */
+
+#login-public-image{
+    width: 60vw;
+    height: 100vh;
+    object-fit: contain;
+}
+#login-public-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
+}
+#login-public-content p, #login-public-content h1{
+    margin: 3px 0px;
+}
+#go-signup{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    font-style: italic;
+}
+#go-signup a{
+    color: #617A55;
+    font-weight: bold;
+}
+#login-public-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.login-public-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.login-public-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
