@@ -132,6 +132,24 @@ button:hover{
     font-size: 14px;    
     margin-bottom: 5px;
 }
+.signup-form-section span{
+    font-size: 10px;    
+    color: red;
+}
+#signup-input-name{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 15px 100px 15px 0px;
+}
+#signup-input-firstName{
+    width: 50%;
+    margin: 0 5px 0 0;
+}
+#signup-input-lastName{
+    width: 50%;
+    margin: 0 0 0 5px;
+}
 form input,input[type="submit"]{
     height: 35px;
     border-radius: 5px;
@@ -139,6 +157,7 @@ form input,input[type="submit"]{
     font-size: 14px;
     padding: 0px 10px;
 }
+
 
 /* ------- login-public.ejs -------- */
 
