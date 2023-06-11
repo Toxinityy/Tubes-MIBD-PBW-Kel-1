@@ -17,13 +17,25 @@
             <h1>Sign Up</h1>
             <p>Please insert information below</p>
             <form method="POST" action="/auth">
-                <div id="signup-input-name" class="signup-form-section">
-                        <label for="name">Name</label>
-                        <input type="text" name="name" placeholder="Example: User">
+                <div id="signup-input-name">
+                    <div id="signup-input-firstName" class="signup-form-section">
+                            <label for="name">First Name</label>
+                            <input type="text" name="firstName" placeholder="Example: User">
+                    </div>
+                    <div id="signup-input-lastName" class="signup-form-section">
+                        <label for="name">Last Name</label>
+                        <input type="text" name="lastName" placeholder="Example: User">
+                    </div>
                 </div>
                 <div id="signup-input-email" class="signup-form-section" >
                         <label for="email" >Email</label>
                         <input type="text" name="email" placeholder="user@email.com">
+                        <span id = "check-email-result"></span>
+                </div>
+                <div id="signup-input-username" class="signup-form-section">
+                    <label for="name">Username</label>
+                    <input type="text" name="username" placeholder="Example: User">
+                    <span id = "check-username-result"></span>
                 </div>
                 <div id="signup-input-password" class="signup-form-section">
                         <label for="password">Password</label>
