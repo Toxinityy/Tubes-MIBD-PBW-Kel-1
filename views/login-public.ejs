@@ -20,17 +20,24 @@
                 <div id="login-public-input-email" class="login-public-form-section">
                         <label for="email">Email:</label>
                         <input type="text" name="email">
+                        <span id = "check-login-email-result"><%= emailProblem %></span>
                 </div>
                 <div id="login-public-input-password" class="login-public-form-section">
                         <label for="password">Password:</label>
                         <input type="password" name="password">
+                        <span id = "check-login-password-result"><%= passwordProblem %></span>
                 </div>
                 <div id="input-public-login" class="login-public-form-section">
                     <input type="submit" name="login" value="Log In" />
+                    <span id = "check-login-result"><%= loginProblem %></span>
                 </div>
                 <div id="go-signup" class="login-public-form-section">
                     <p>Don't have an account?</p>
                     <a href="/signup">Sign Up</a>
+                </div>
+                <div id="go-admin" class="login-public-form-section">
+                    <p>Admin?</p>
+                    <a href="/adminlogin">Click Here</a>
                 </div>
             </form>
         </div>
