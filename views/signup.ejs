@@ -16,7 +16,7 @@
         <div id="signup-content">
             <h1>Sign Up</h1>
             <p>Please insert information below</p>
-            <form method="POST" action="/auth">
+            <form method="POST" action="/signup">
                 <div id="signup-input-name">
                     <div id="signup-input-firstName" class="signup-form-section">
                             <label for="name">First Name</label>
@@ -28,14 +28,14 @@
                     </div>
                 </div>
                 <div id="signup-input-email" class="signup-form-section" >
-                        <label for="email" >Email</label>
-                        <input type="text" name="email" placeholder="user@email.com">
-                        <span id = "check-email-result"></span>
+                    <label for="email" >Email</label>
+                    <input type="text" name="email" placeholder="user@email.com">
+                    <span id = "check-signup-email-result"><%= emailProblem %></span>
                 </div>
                 <div id="signup-input-username" class="signup-form-section">
                     <label for="name">Username</label>
                     <input type="text" name="username" placeholder="Example: User">
-                    <span id = "check-username-result"></span>
+                    <span id = "check-signup-username-result"><%= usernameProblem %></span>
                 </div>
                 <div id="signup-input-password" class="signup-form-section">
                         <label for="password">Password</label>
@@ -44,9 +44,11 @@
                 <div id="signup-input-confirmpassword" class="signup-form-section">
                         <label for="confirmpassword">Confirm Password</label>
                         <input type="password" name="confirmpassword">
+                        <span id = "check-signup-password-result"><%= passwordProblem %></span>
                 </div>
                 <div id="input-signup" class="signup-form-section">
                     <input type="submit" name="signup" value="Sign Up" />
+                    <span id = "check-signup-result"><%= signupProblem %></span>
                 </div>
                 <div id="go-login" class="signup-form-section">
                     <p>Already have an account?</p>
