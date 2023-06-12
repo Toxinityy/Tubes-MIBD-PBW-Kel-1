@@ -97,18 +97,30 @@ app.get("/login", async(req,res) => {
         res.redirect('/dashboard-public');
     }
     else{
-        res.render("login-public");
+        res.render("login-public",{
+            emailProblem: '',
+            passwordProblem: '',
+            loginProblem: ''
+        });
     }
 });
 app.get("/signup", async(req,res) => {
-    res.render("signup");
+    res.render("signup", {
+        emailProblem: '',
+        usernameProblem: '',
+        passwordProblem: '',
+        signupProblem: ''
+    });
+});
+app.get('/adminlogin', async(req, res) => {
+    res.render('login-admin');
 });
 app.get("/dashboard-public", async(req,res) => {
     res.render("dashboard-public",{
         user: req.session.username
     })
 });
-app.post("/auth", async (req, res) => {
+app.post("/signup", async (req, res) => {
     // terima nama, email, pass, confirm pass
     const{ firstName, lastName, email, username, password, confirmpassword } = req.body;
 
@@ -130,38 +142,86 @@ app.post("/auth", async (req, res) => {
             }
             else{ // jika tidak match
                 // pesan kesalahan
-                res.redirect("/signup");
+                res.render("signup", {
+                    emailProblem: '',
+                    usernameProblem: '',
+                    passwordProblem: 'Password does not match',
+                    signupProblem: ''
+                });
             }
         }
-        else{ //sudah ada pengguna dengan email atau username tersebut
-            res.redirect("/signup");
+        else if(signedUpEmail.length != 0 && signedUpUsername.length == 0){ //sudah ada pengguna dengan email tersebut
+            res.render("signup", {
+                emailProblem: 'Email already registered',
+                usernameProblem: '',
+                passwordProblem: '',
+                signupProblem: ''
+            });
+        }
+        else if(signedUpEmail.length == 0 && signedUpUsername.length != 0){ //sudah ada pengguna dengan username tersebut
+            res.render("signup", {
+                emailProblem: '',
+                usernameProblem: 'Username already exists',
+                passwordProblem: '',
+                signupProblem: ''
+            });
+        }
+        else{
+            res.render("signup", {
+                emailProblem: 'Email already registered',
+                usernameProblem: 'Username already exists',
+                passwordProblem: '',
+                signupProblem: ''
+            });
         }
     }
     else{
         // pesan kesalahan
-        res.redirect("/signup");
+        res.render("signup", {
+            emailProblem: '',
+            usernameProblem: '',
+            passwordProblem: '',
+            signupProblem: 'Please insert all the form'
+        });
     }
 });
 
-app.post("/login-auth", async(req,res)=>{
+app.post("/login", async(req,res)=>{
     const{ email, password} = req.body;
-    const signedUpEmail = await checkEmail(await dbConnect(), email);
-    if(signedUpEmail.length==0){
-        //email belum terdaftar
-        res.redirect('/login');
-    }
-    else{
-        const registeredPassword = signedUpEmail[0].password;
-        if(registeredPassword == password){
-            //jika pass sesuai maka login berhasil
-            req.session.logged_in = true;
-            req.session.username = signedUpEmail[0].username;
-            res.redirect('/dashboard-public');
+    if(email!="" && password!=""){
+        const signedUpEmail = await checkEmail(await dbConnect(), email);
+        if(signedUpEmail.length==0){
+            //email belum terdaftar
+            res.render("login-public",{
+                emailProblem: 'Email does not exists',
+                passwordProblem: '',
+                loginProblem: ''
+            });
         }
         else{
-            //jika tidak maka tetap di halaman login
-            res.redirect('/login');
+            const registeredPassword = signedUpEmail[0].password;
+            if(registeredPassword == password){
+                //jika pass sesuai maka login berhasil
+                req.session.logged_in = true;
+                req.session.username = signedUpEmail[0].username;
+                res.redirect('/dashboard-public');
+            }
+            else{
+                //jika tidak maka tetap di halaman login
+                res.render("login-public",{
+                    emailProblem: '',
+                    passwordProblem: 'Wrong password',
+                    loginProblem: ''
+                });
+            }
         }
+    }
+    else{
+        res.render("login-public",{
+            emailProblem: '',
+            passwordProblem: '',
+            loginProblem: 'Please insert all the form'
+        });
     }
 });
 
