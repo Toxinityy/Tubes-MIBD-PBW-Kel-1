@@ -48,6 +48,75 @@ const dbConnect = () => {
     });
 };
 
+const getTas = (conn, filter) =>{
+    return new Promise((resolve, reject) => {
+        let query = "SELECT * FROM tas";
+        let params = [];
+        if(filter){
+            query += "WHERE namaTas LIKE ?";
+            params.push(`%${filter}%`);
+        }
+        conn.query(query, params, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result[0].count);
+            }
+          });
+    });
+};
+
+const getBrands = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaMerk AS brand FROM merk";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const brands = [];
+        for (let row of result) {
+          brands.push(row.brand);
+        }
+        resolve(brands);
+      }
+    });
+  });
+};
+
+const getCategories = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaKategori AS category FROM kategori";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const categories = [];
+        for (let row of result) {
+          categories.push(row.category);
+        }
+        resolve(categories);
+      }
+    });
+  });
+};
+
+const getSubCategories = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaSubKategori AS sub_category FROM subkategori";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const subCategories = [];
+        for (let row of result) {
+          subCategories.push(row.sub_category);
+        }
+        resolve(subCategories);
+      }
+    });
+  });
+};
+
 const checkEmail = (conn, email)=>{
     return new Promise((resolve, reject)=>{
         conn.query('SELECT * FROM Publik WHERE emailPengguna = ?', [email],(err, result)=>{
@@ -230,6 +299,28 @@ app.get("/account-publik", async(req,res)=>{
         user: req.session.username
     });
 })
+
+app.get("/search", async (req, res) => {
+    try {
+        const conn = await dbConnect();
+        const filter = req.query.filter || "";
+        
+        const brands = await getBrands(conn);
+        const categories = await getCategories(conn);
+        const subCategories = await getSubCategories(conn);
+        const tas = await getTas(conn, filter, brands, categories, subCategories);
+
+        res.render('search', { 
+        brands,
+        categories,
+        subCategories,
+        tas 
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
+    }
+}); 
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
