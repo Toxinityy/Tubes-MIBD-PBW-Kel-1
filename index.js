@@ -90,7 +90,12 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
 
 app.get("/", async(req,res) => {
     // const conn = await dbConnect();
-    res.render("home");
+    if(req.session.logged_in == false){
+        res.render("home");
+    }
+    else{
+        res.redirect('/dashboard-public');
+    }
 });
 app.get("/login", async(req,res) => {
     if(req.session.logged_in){
@@ -123,6 +128,7 @@ app.get("/dashboard-public", async(req,res) => {
 app.post("/signup", async (req, res) => {
     // terima nama, email, pass, confirm pass
     const{ firstName, lastName, email, username, password, confirmpassword } = req.body;
+    console.log(firstName+" "+ lastName+" "+ email+" "+ username+" "+password+" "+ confirmpassword)
 
     // cek form kosong
     if(firstName!="" && lastName!="" && email!="" && username!="" && password!= "" && confirmpassword!=""){ 
@@ -135,7 +141,12 @@ app.post("/signup", async (req, res) => {
             //cek password match
             if(password == confirmpassword){ // jika match
                 // insert database
-                insertData(await dbConnect(), firstName, lastName, username, email, password).then((result)=>{
+                insertData(await dbConnect(), firstName, lastName, username, email, password).then(async (result)=>{
+                    const signedUpData = await checkEmail(await dbConnect(), email);
+                    req.session.logged_in = true;
+                    req.session.username = signedUpData[0].username;
+                    req.session.idPengguna = signedUpData[0].idPengguna;
+                    req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -181,7 +192,7 @@ app.post("/signup", async (req, res) => {
             emailProblem: '',
             usernameProblem: '',
             passwordProblem: '',
-            signupProblem: 'Please insert all the form'
+            signupProblem: 'Please insert all fields'
         });
     }
 });
@@ -204,6 +215,9 @@ app.post("/login", async(req,res)=>{
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
                 req.session.username = signedUpEmail[0].username;
+                    req.session.idPengguna = signedUpEmail[0].idPengguna;
+                    req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
+                    console.log(req.session.namaLengkap);
                 res.redirect('/dashboard-public');
             }
             else{
@@ -220,7 +234,7 @@ app.post("/login", async(req,res)=>{
         res.render("login-public",{
             emailProblem: '',
             passwordProblem: '',
-            loginProblem: 'Please insert all the form'
+            loginProblem: 'Please insert all fields'
         });
     }
 });
