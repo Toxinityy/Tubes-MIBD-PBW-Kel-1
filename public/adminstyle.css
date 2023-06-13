@@ -1,22 +1,71 @@
-/* ------- account-publik.ejs ------- */
-#img-sand-background{
-    width: 100vw;
-    height: 61vh;
+
+*{
+    font-family: 'Roboto', sans-serif;
+    background-color: #FFFEF9;
+}
+body{
+    margin: 0px;
+}
+h1{
+    font-size: 55px;
+}
+::placeholder{
+    color: 6E6E6E;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+/* ------- login-admin.ejs ------- */
+.wrapper{
+    display: flex;
+}
+#img-admin-login{
+    scale: 80%;
+    width: 60vw;
+    height: 100vh;
     object-fit: cover;
 }
-#account-publik-profil-content{
+#admin-login-content{
     display: flex;
-    align-items: center;
-    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
-    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
-    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
-    width: 90vw;
-    height: 56vh;
-    border-radius: 30px;
-    position: absolute;
-    top: 28vh;
-    left: 5vw;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
 }
-#account-publik-timeline-content{
-    top: 100vh;
+#admin-login-content p, #admin-login-content h1{
+    margin: 3px 0px;
+}
+#admin-login-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.admin-login-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.admin-login-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
+.admin-login-form-section span{
+    font-size: 10px;    
+    color: red;
+}
+form input,input[type="submit"]{
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+button, input[type="submit"]{
+    background-color: #617A55;
+    color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+}
+button:hover{
+    background-color: #495c40;
+    color: #d4d4d0;
+    transition: 0.3s;
 }
