@@ -4,7 +4,7 @@
         <meta charset="UTF-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <link rel="stylesheet" href="styles.css">
+        <link rel="stylesheet" href="adminstyle.css">
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
@@ -12,20 +12,20 @@
     </head>
     <body>
         <div class="wrapper">
-            <img src="../img/admin-login.jpg" alt="Admin Login Image" id="admin-login">
+            <img src="../img/admin-login.jpg" alt="Admin Login Image" id="img-admin-login">
             <div id="admin-login-content">
                 <h1>Log In</h1>
                 <p>Hello Sir Dev.</p>
-                <form method="POST" action="/adminsignin">
-                    <div id="admin-signin-email" class="signin-form-section">
+                <form method="POST" action="/adminlogin">
+                    <div id="admin-login-email" class="admin-login-form-section">
                         <label for="name">Email</label>
-                        <input type="text" name="email" placeholder="user@gmail.com">
+                        <input type="email" name="email" pattern=".+@ardent\.com" placeholder="user@ardent.com">
                     </div>
-                    <div id="admin-signin-password" class="signin-form-section">
+                    <div id="admin-login-password" class="admin-login-form-section">
                         <label for="password">Password</label>
                         <input type="password" name="password">
                     </div>
-                    <div id="input-admin-signin" class="signin-form-section">
+                    <div id="input-admin-login" class="admin-login-form-section">
                         <input type="submit" value="Log In">
                     </div>
                 </form>
