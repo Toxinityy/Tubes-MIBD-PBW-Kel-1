@@ -30,6 +30,8 @@ button:hover{
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 500px;
+    margin-bottom: 100px;
 }
 #hero-title{
     width: 30vw;
@@ -44,6 +46,49 @@ button:hover{
 #hero-section button{
     width: 200px;
 }
+
+/* ------- Home Sign Up ------- */
+#home-signup form{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+#home-signup-image{
+    width: 500px;
+    height: 520px;
+    object-fit: cover;
+    margin-right: 30px;
+    border-radius: 20px;
+}
+#home-signup-input-name {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+  
+.first-name-section,
+.last-name-section {
+    display: flex;
+    flex-direction: column;
+}
+#home-signup h1, #home-signup h4, #home-signup h3{
+    margin: 0px;
+}
+#home-signup h4, #home-signup h3{
+    color: #B5B5B5;
+}
+#home-signup h4{
+    font-size: 0.9em;
+}
+#already-a-reviewer{
+    display: flex;
+}
+#already-a-reviewer a{
+    margin-left: 5px;
+}
+
+/* ------- navbar ------- */
 #navbar{
     display: flex;
     align-items: center;

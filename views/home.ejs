@@ -23,5 +23,44 @@
     <div class="top-ten" id="top-ten">
         
     </div>
+   <div class="home-signup" id="home-signup">
+       <form method="POST" action="/auth">
+           <img src="../img/Rectangle 15.png" alt="Person Holding Bag" id="home-signup-image">
+           <div id="signup-wrapper">
+                <h3>Starts for free</h3>
+                <h1>Become A <span>Reviewer</span></h1>
+                <div id="already-a-reviewer">
+                    <h4>Already a Reviewer?</h4>
+                    <a href="/login">Login</a>
+                </div>
+                <div id="home-signup-input-name" class="signup-form-section">
+                    <div class="first-name-section">
+                      <label for="first-name">First Name</label>
+                      <input type="text" name="first-name">
+                    </div>
+                    <div class="last-name-section">
+                      <label for="last-name">Last Name</label>
+                      <input type="text" name="last-name">
+                    </div>
+                  </div>
+                  
+                <div id="signup-input-name" class="signup-form-section">
+                    <label for="username">Username</label>
+                    <input type="text" name="username">
+                </div>
+                <div id="signup-input-password" class="signup-form-section">
+                    <label for="password">Password</label>
+                    <input type="password" name="password">
+                </div>
+                <div id="signup-input-confirmpassword" class="signup-form-section">
+                    <label for="confirmpassword">Confirm Password</label>
+                    <input type="password" name="confirmpassword">
+                </div>
+                <div id="go-login" class="signup-form-section">
+                    <input type="submit" name="signup" value="Sign Up" />
+                </div>
+            </div>
+        </form>
+   </div> 
 </body>
 </html>
