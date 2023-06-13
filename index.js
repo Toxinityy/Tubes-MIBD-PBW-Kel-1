@@ -90,11 +90,11 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
 
 app.get("/", async(req,res) => {
     // const conn = await dbConnect();
-    if(req.session.logged_in == false){
-        res.render("home");
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
     }
     else{
-        res.redirect('/dashboard-public');
+        res.render("home");
     }
 });
 app.get("/login", async(req,res) => {
@@ -110,12 +110,17 @@ app.get("/login", async(req,res) => {
     }
 });
 app.get("/signup", async(req,res) => {
-    res.render("signup", {
-        emailProblem: '',
-        usernameProblem: '',
-        passwordProblem: '',
-        signupProblem: ''
-    });
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("signup", {
+            emailProblem: '',
+            usernameProblem: '',
+            passwordProblem: '',
+            signupProblem: ''
+        });
+    }
 });
 app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
@@ -128,7 +133,6 @@ app.get("/dashboard-public", async(req,res) => {
 app.post("/signup", async (req, res) => {
     // terima nama, email, pass, confirm pass
     const{ firstName, lastName, email, username, password, confirmpassword } = req.body;
-    console.log(firstName+" "+ lastName+" "+ email+" "+ username+" "+password+" "+ confirmpassword)
 
     // cek form kosong
     if(firstName!="" && lastName!="" && email!="" && username!="" && password!= "" && confirmpassword!=""){ 
@@ -215,9 +219,8 @@ app.post("/login", async(req,res)=>{
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
                 req.session.username = signedUpEmail[0].username;
-                    req.session.idPengguna = signedUpEmail[0].idPengguna;
-                    req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
-                    console.log(req.session.namaLengkap);
+                req.session.idPengguna = signedUpEmail[0].idPengguna;
+                req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
                 res.redirect('/dashboard-public');
             }
             else{
