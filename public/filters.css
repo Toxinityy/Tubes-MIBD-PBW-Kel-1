@@ -1,0 +1,22 @@
+#filter-wrapper-content{
+    display: flex;
+}
+#filters{
+    display: flex;
+    flex-direction: column;
+    margin: 10px;
+    width: 15vw;
+}
+#filters .sections{
+    margin: 20px 0px;
+}
+#filters button{
+    max-width: 50%;
+}
+#filters .rows{
+    display: flex;
+    align-items: center;
+}
+.rows label{
+    margin-left: 5px;
+}
