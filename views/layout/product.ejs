@@ -1,0 +1,14 @@
+<div id="main-content">
+    <h2>Product Details</h2>
+    <% for (let productData of products) { %>
+        <div class="product" id="product<%= productData.idTas %>">
+            <p>ID: <%= productData.idTas %></p>
+            <p>Name: <%= productData.namaTas %></p>
+            <p>Color: <%= productData.warna %></p>
+            <p>Dimensions: <%= productData.panjang %> x <%= productData.lebar %> x <%= productData.tinggi %></p>
+            <p>Photo: <%= productData.foto %></p>
+            <p>Brand ID: <%= productData.idMerk %></p>
+            <p>Subcategory ID: <%= productData.idSubKategori %></p>
+        </div>
+    <% } %>
+</div>
