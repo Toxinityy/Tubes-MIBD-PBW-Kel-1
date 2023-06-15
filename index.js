@@ -4,6 +4,7 @@ import express from "express";
 import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
+import { getProductData } from './models/productModel.js'
 
 const PORT = 8080;
 const app = express();
@@ -300,7 +301,7 @@ app.get("/account-publik", async(req,res)=>{
     });
 })
 
-app.get("/search", async (req, res) => {
+app.get("/filter", async (req, res) => {
     try {
         const conn = await dbConnect();
         const filter = req.query.filter || "";
@@ -310,17 +311,23 @@ app.get("/search", async (req, res) => {
         const subCategories = await getSubCategories(conn);
         const tas = await getTas(conn, filter, brands, categories, subCategories);
 
-        res.render('search', { 
-        brands,
-        categories,
-        subCategories,
-        tas 
+        const products = await getProductData(conn);
+
+        res.render('filter', {
+            user: req.session.username, 
+            brands,
+            categories,
+            subCategories,
+            tas,
+            products
         });
     } catch (error) {
-        console.error(error);
-        res.status(500).render('error', { message: 'Internal Server Error' });
+            console.error(error);
+            res.status(500).render('error', { message: 'Internal Server Error' });
     }
 }); 
+
+export { dbConnect };
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
