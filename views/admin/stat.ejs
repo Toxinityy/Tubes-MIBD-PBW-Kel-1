@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="admin.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <script src="./src/aquisitions.js" defer></script>
+        <title>Statistics</title>
+    </head>
+    <body>
+        <%- include('../layout/navbar-admin.ejs') %>
+        <div class="wrapper">
+            <div id="upper-content">
+                <h1 id="hstat">Statistics</h1>
+                <input id="export-stat" type="submit" value="Export">
+            </div>
+            <div id="mid-content">
+                <form action="" method="POST" id="statform">
+                    <div id="brands">
+                        <label for="lbrands" id="lbrands">Brand</label><br>
+                        <p>select one or more option</p>
+                        <select width=300 style="width: 200px" name="brands" id="selbrand" size="5" multiple>
+                            <% for(const row of brands) { %>
+                                <option value="<%- row.idMerk %>"><%= row.namaMerk %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div id="category">
+                        <label for="lcat" id="lcat">Category</label><br>
+                        <p>select one option</p>
+                        <select width=300 style="width: 200px" name="category" id="selcat" size="5">
+                            <% for(const row of category) { %>
+                                <option value="<%- row.idKategori %>"><%= row.namaKategori %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                    <div id="subcategory">
+                        <label for="lsubcat" id="lsubcat">SubCategory</label><br>
+                        <p>select one or more option</p>
+                        <select width=300 style="width: 200px" name="subcategory" id="selsub" size="5" multiple>
+                            <% for(const row of subcategory) { %>
+                                <option value="<%- row.idSubKategori %>"><%= row.namaSubKategori %></option>
+                            <% } %>
+                        </select>
+                    </div>
+                </form>
+            </div>
+            <div id="lower-content">
+                <label for="graph" id="lgraph">Rating Statistics</label>
+                <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+    <title>Sign Up Page</title>
+</head>
+<body>
+    <div class="wrapper">
+        <img src="../img/signup-image.jpg" title="Sign Up Image" id="signup-image"/>
+        <div id="signup-content">
+            <h1>Sign Up</h1>
+            <p>Please insert information below</p>
+            <form method="POST" action="/signup">
+                <div id="signup-input-name">
+                    <div id="signup-input-firstName" class="signup-form-section">
+                            <label for="name">First Name</label>
+                            <input type="text" name="firstName" placeholder="Example: User">
+                    </div>
+                    <div id="signup-input-lastName" class="signup-form-section">
+                        <label for="name">Last Name</label>
+                        <input type="text" name="lastName" placeholder="Example: User">
+                    </div>
+                </div>
+                <div id="signup-input-email" class="signup-form-section" >
+                    <label for="email" >Email</label>
+                    <input type="text" name="email" placeholder="user@email.com">
+                    <span id = "check-signup-email-result"><%= emailProblem %></span>
+                </div>
+                <div id="signup-input-username" class="signup-form-section">
+                    <label for="name">Username</label>
+                    <input type="text" name="username" placeholder="Example: User">
+                    <span id = "check-signup-username-result"><%= usernameProblem %></span>
+                <div id="signup-input-password" class="signup-form-section">
+                        <label for="password">Password</label>
+                        <input type="password" name="password">
+                </div>
+                <div id="signup-input-confirmpassword" class="signup-form-section">
+                        <label for="confirmpassword">Confirm Password</label>
+                        <input type="password" name="confirmpassword">
+                        <span id = "check-signup-password-result"><%= passwordProblem %></span>
+                </div>
+                <div id="input-signup" class="signup-form-section">
+                    <input type="submit" name="signup" value="Sign Up" />
+                    <span id = "check-signup-result"><%= signupProblem %></span>
+                </div>
+                <div id="go-login" class="signup-form-section">
+                    <p>Already have an account?</p>
+                    <a href="/login">Log In</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>

@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="admin.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <title>Add Items</title>
+    </head>
+    <body>
+        <%- include('../layout/navbar-admin.ejs') %>
+        <div class="wrapper">
+            <h1 id="hadd">Add Items</h1>
+            <form action="/addbags" method="POST">
+                <div id="upper-add">
+                    <label for="nama-item">Item Name</label>
+                    <input type="text">
+                </div>
+                <div id="mid-add">
+                    <div id="brands">
+                        <label for="lbrands" id="lbrands">Brand</label><br>
+                        <% //for(const row of brands) { %>
+                            <input type="checkbox" name="brands" id="<%- //row.idMerk %>">
+                            <label for="<%- //row.idMerk %>"> <%= //row.namaMerk %> </label><br>
+                        <% } %>
+                    </div>
+                    <div id="category">
+                        <label for="lcat" id="lcat">Category</label><br>
+                        <% //for(const row of category) { %>
+                            <input type="radio" name="category" id="<%- //row.idKategori %>">
+                            <label for="<%- //row.idMerk %>"> <%= //row.namaKategori %> </label><br>
+                        <% } %>
+                    </div>
+                    <div id="subcategory">
+                        <label for="lsubcat" id="lsubcat">SubCategory</label><br>
+                        <% //for(const row of subcategory) { %>
+                            <input type="checkbox" name="subcategory" id="<%- //row.idSubKategori %>">
+                            <label for="<%- //row.idMerk %>"> <%= //row.namaSubKategori %> </label><br>
+                        <% } %>
+                    </div>
+                </div>
+                <div id="lower-add">
+                    <div id="designer-add">
+                        <label for="ldesigner" id="ldesigner">Designer (optional)</label>
+                        <% for(const row of designer) { %>
+                            <input type="radio" name="designer" id="<%- row.idDesigner %>">
+                            <label for="<%- row.idDesigner %>"> <%= row.namaDesigner %> </label><br>
+                        <% } %>
+                    </div>
+                    <div id="colors-add">
+                        <label for="lcolors" id="lcolors">Color</label><br>
+                        <% for(const row of bags) { %>
+                            <input type="checkbox" name="color" id="<%- row.idTas %>">
+                            <label for="<%- row.idTas %>"> <%= row.warna %> </label><br>
+                        <% } %>
+                    </div>
+                    <div id="dimension-add">
+
+                    </div>
+                </div>
+            </form>
+        </div>
+    </body>
+</html>
