@@ -252,6 +252,52 @@ app.post("/login", async(req,res)=>{
 app.get("/my-account", render_my_account);
 app.get("/account-publik", render_account_publik);
 
+app.get("/filter", async (req, res) => {
+    try {
+        const conn = await dbConnect();
+        const searchParams = req.query.search || "";
+        const selectedBrand = req.query.brand || "";
+        const selectedCategory = req.query.category || "";
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
+        
+        const brands = await getBrands(conn);
+        const categories = await getCategories(conn);
+        
+        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        
+        const accounts = await getAccountData(conn, searchParams);
+        
+        const paginatedProducts = [];
+        const start = (page - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, products.length);
+
+        for (let i = start; i < end; i++) {
+            paginatedProducts.push(products[i]);
+        }
+
+        res.render('filter', {
+            user: req.session.username, 
+            brands,
+            categories,
+            // subCategories,
+            products: paginatedProducts,
+            accounts,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
+    }
+});
+
+
+export { dbConnect };
+
+
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
 });
