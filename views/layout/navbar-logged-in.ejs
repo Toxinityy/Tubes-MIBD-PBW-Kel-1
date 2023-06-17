@@ -7,9 +7,9 @@
             <a href="">Top 10</a>
         </div>
         <div id="navbar-logged-in-right-feature">
-            <h4>Search</h4>
+            <%- include('./search.ejs') %>
             <hr>
-            <p>Welcome, </p> <a href="./account-publik"> <%= user %></a>
+            <p>Welcome, </p> <a href="./account-publik" id="user-logged-in"> <%= user %></a>
         </div>
     </nav>
 </header>

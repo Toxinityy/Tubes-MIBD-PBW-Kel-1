@@ -1,0 +1,15 @@
+<div id="right-content">
+    <h2>Accounts Details</h2>
+    <div id="right-content-data">
+        <% if (accounts.length === 0) { %>
+            <p>No Data Available</p>
+        <% } %>
+        <% for (let accountData of accounts) { %>
+            <div class="accountData" id="accountData<%= accountData.idTas %>">
+                <img src="<%= accountData.fotoProfile %>" alt="foto-profil">
+                <p><%= accountData.firstName %> <%= accountData.lastName %></p>
+                <!-- <p><%= //accountData.username %></p> -->
+            </div>
+        <% } %>
+    </div>  
+</div>

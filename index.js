@@ -4,6 +4,8 @@ import express from "express";
 import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
+import { getProductData } from './models/productModel.js'
+import { getAccountData } from "./models/accountSearchModel.js";
 
 const PORT = 8080;
 const app = express();
@@ -27,7 +29,7 @@ app.use(
 const pool = mysql.createPool({
     user: "root",
     password: "",
-    database: "IDE",
+    database: "review_tas",
     host: "localhost",
 });
 
@@ -46,6 +48,40 @@ const dbConnect = () => {
             }
         });
     });
+};
+
+const getBrands = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaMerk AS brand FROM merk";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const brands = [];
+        for (let row of result) {
+          brands.push(row.brand);
+        }
+        resolve(brands);
+      }
+    });
+  });
+};
+
+const getCategories = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaKategori AS category FROM kategori";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const categories = [];
+        for (let row of result) {
+          categories.push(row.category);
+        }
+        resolve(categories);
+      }
+    });
+  });
 };
 
 const checkEmail = (conn, email)=>{
@@ -139,7 +175,6 @@ app.post("/signup", async (req, res) => {
         // validasi database
         const signedUpEmail = await checkEmail(await dbConnect(), email);
         const signedUpUsername = await checkUsername(await dbConnect(), username);
-
         // belum ada pengguna dengan email tersebut
         if(signedUpEmail.length == 0 && signedUpUsername.length == 0){
             //cek password match
@@ -247,6 +282,50 @@ app.get("/account-publik", async(req,res)=>{
         user: req.session.username
     });
 })
+app.get("/filter", async (req, res) => {
+    try {
+        const conn = await dbConnect();
+        const searchParams = req.query.search || "";
+        const selectedBrand = req.query.brand || "";
+        const selectedCategory = req.query.category || "";
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
+        
+        const brands = await getBrands(conn);
+        const categories = await getCategories(conn);
+        
+        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        
+        const accounts = await getAccountData(conn, searchParams);
+        
+        const paginatedProducts = [];
+        const start = (page - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, products.length);
+
+        for (let i = start; i < end; i++) {
+            paginatedProducts.push(products[i]);
+        }
+
+        res.render('filter', {
+            user: req.session.username, 
+            brands,
+            categories,
+            // subCategories,
+            products: paginatedProducts,
+            accounts,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
+    }
+});
+
+
+export { dbConnect };
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
