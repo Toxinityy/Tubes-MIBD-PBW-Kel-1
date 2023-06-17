@@ -103,6 +103,10 @@ button:hover{
     font-size: 18px;
     font-weight: bold;
 }
+#myChart{
+    display: flex;
+    margin: 15px;
+}
 #brands, #category, #subcategory{
     flex-direction: column;
     margin: 15px;

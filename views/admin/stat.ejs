@@ -8,7 +8,8 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
-        <script src="./src/aquisitions.js" defer></script>
+        <!-- <script src="./src/aquisitions.js" type="module" defer></script> -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
         <title>Statistics</title>
     </head>
     <body>
@@ -16,7 +17,8 @@
         <div class="wrapper">
             <div id="upper-content">
                 <h1 id="hstat">Statistics</h1>
-                <input id="export-stat" type="submit" value="Export">
+                <!-- <input  type="submit" value="Export"> -->
+                <button id="export-stat" onclick="window.print()">Export</button>
             </div>
             <div id="mid-content">
                 <form action="" method="POST" id="statform">
@@ -51,7 +53,43 @@
             </div>
             <div id="lower-content">
                 <label for="graph" id="lgraph">Rating Statistics</label>
-                <div style="width: 800px;"><canvas id="acquisitions"></canvas></div>
+                <div id="chart-stats">
+                    <!-- <canvas id="mychart" style="width:100%;max-width:700px"></canvas> -->
+                    <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+                    <script>
+                        var xyValues = [
+                          {x:50, y:7},
+                          {x:60, y:8},
+                          {x:70, y:8},
+                          {x:80, y:9},
+                          {x:90, y:9},
+                          {x:100, y:9},
+                          {x:110, y:10},
+                          {x:120, y:11},
+                          {x:130, y:14},
+                          {x:140, y:14},
+                          {x:150, y:15}
+                        ];
+                        
+                        new Chart("myChart", {
+                          type: "scatter",
+                          data: {
+                            datasets: [{
+                              pointRadius: 4,
+                              pointBackgroundColor: "rgb(0,0,255)",
+                              data: xyValues
+                            }]
+                          },
+                          options: {
+                            legend: {display: false},
+                            scales: {
+                              xAxes: [{ticks: {min: 40, max:160}}],
+                              yAxes: [{ticks: {min: 6, max:16}}],
+                            }
+                          }
+                        });
+                    </script>
+                </div>
             </div>
         </div>
     </body>

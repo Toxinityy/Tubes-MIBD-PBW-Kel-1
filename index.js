@@ -313,15 +313,35 @@ const getBag = conn => {
         })
     })
 }
+//dapetin review
+const getReview = conn => {
+    return new Promise((resolve, reject) => {
+        const query = 'SELECT * FROM Review';
+        conn.query(query, (err, result) => {
+            if(err){
+                reject(err);
+            }else{
+                resolve(result);
+            }
+        })
+    })
+}
 app.get('/stat', async(req, res) => {
     const conn = await dbConnect();
     const brands = await getBrands(conn);
     const category = await getKategori(conn);
     const subcategory = await getSubKat(conn);
+    const review = await getReview(conn);
+    const query = 'SELECT t.namaK'
+    // SELECT t.namaTas, AVG(r.rateValue) AS meanRating
+    // FROM Tas t
+    // JOIN Review r ON t.idTas = r.idTas
+    // GROUP BY t.idTas
     res.render('admin/stat', {
         brands: brands,
         category: category,
-        subcategory: subcategory
+        subcategory: subcategory,
+        review: review
     });
 });
 app.get('/additems', async(req, res) => {
