@@ -126,7 +126,12 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
 
 app.get("/", async(req,res) => {
     // const conn = await dbConnect();
-    res.render("home");
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("home");
+    }
 });
 app.get("/login", async(req,res) => {
     if(req.session.logged_in){
@@ -141,12 +146,17 @@ app.get("/login", async(req,res) => {
     }
 });
 app.get("/signup", async(req,res) => {
-    res.render("signup", {
-        emailProblem: '',
-        usernameProblem: '',
-        passwordProblem: '',
-        signupProblem: ''
-    });
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("signup", {
+            emailProblem: '',
+            usernameProblem: '',
+            passwordProblem: '',
+            signupProblem: ''
+        });
+    }
 });
 app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
@@ -165,13 +175,17 @@ app.post("/signup", async (req, res) => {
         // validasi database
         const signedUpEmail = await checkEmail(await dbConnect(), email);
         const signedUpUsername = await checkUsername(await dbConnect(), username);
-
         // belum ada pengguna dengan email tersebut
         if(signedUpEmail.length == 0 && signedUpUsername.length == 0){
             //cek password match
             if(password == confirmpassword){ // jika match
                 // insert database
-                insertData(await dbConnect(), firstName, lastName, username, email, password).then((result)=>{
+                insertData(await dbConnect(), firstName, lastName, username, email, password).then(async (result)=>{
+                    const signedUpData = await checkEmail(await dbConnect(), email);
+                    req.session.logged_in = true;
+                    req.session.username = signedUpData[0].username;
+                    req.session.idPengguna = signedUpData[0].idPengguna;
+                    req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -217,7 +231,7 @@ app.post("/signup", async (req, res) => {
             emailProblem: '',
             usernameProblem: '',
             passwordProblem: '',
-            signupProblem: 'Please insert all the form'
+            signupProblem: 'Please insert all fields'
         });
     }
 });
@@ -240,6 +254,8 @@ app.post("/login", async(req,res)=>{
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
                 req.session.username = signedUpEmail[0].username;
+                req.session.idPengguna = signedUpEmail[0].idPengguna;
+                req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
                 res.redirect('/dashboard-public');
             }
             else{
@@ -256,7 +272,7 @@ app.post("/login", async(req,res)=>{
         res.render("login-public",{
             emailProblem: '',
             passwordProblem: '',
-            loginProblem: 'Please insert all the form'
+            loginProblem: 'Please insert all fields'
         });
     }
 });
@@ -266,7 +282,6 @@ app.get("/account-publik", async(req,res)=>{
         user: req.session.username
     });
 })
-
 app.get("/filter", async (req, res) => {
     try {
         const conn = await dbConnect();

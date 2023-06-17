@@ -165,6 +165,9 @@ INSERT INTO Design (idDesigner, idTas) VALUES
 -- Insert data ke Review
 INSERT INTO Review (rateValue, reviewDescription, idTas, id) VALUES
 (5, 'Great clutch, love the design!', 1, 1),
+(4, 'Nice crossbody bag, good quality.', 2, 2),
+(4, 'Spacious laptop backpack, comfortable to wear.', 3, 1),
+(5, 'Beautiful tote bag, perfect for travel.', 4, 2);
 
 (5, 'Nice crossbody bag, good quality.', 2, 2),
 (5, 'Spacious laptop backpack, comfortable to wear.', 2, 1),
