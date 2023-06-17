@@ -4,8 +4,8 @@ import express from "express";
 import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
-import { getProductData } from './models/productModel.js'
-import { getAccountData } from "./models/accountSearchModel.js";
+import { render_account_publik } from './account_controller/account.js';
+import { render_my_account} from './my_account_controller/myaccount-controller.js';
 
 const PORT = 8080;
 const app = express();
@@ -21,15 +21,16 @@ app.use(
             checkPeriod: 1*60*60*1000
         }),
         secret: "my_secret",
-        resave: true,
-        saveUninitialized: true,
-        logged_in: false
+        resave: false,
+        saveUninitialized: false,
+        logged_in: false,
+        role: 0
     })
 );
 const pool = mysql.createPool({
     user: "root",
     password: "",
-    database: "review_tas",
+    database: "IDE",
     host: "localhost",
 });
 
@@ -48,40 +49,6 @@ const dbConnect = () => {
             }
         });
     });
-};
-
-const getBrands = (conn) => {
-  return new Promise((resolve, reject) => {
-    const query = "SELECT namaMerk AS brand FROM merk";
-    conn.query(query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const brands = [];
-        for (let row of result) {
-          brands.push(row.brand);
-        }
-        resolve(brands);
-      }
-    });
-  });
-};
-
-const getCategories = (conn) => {
-  return new Promise((resolve, reject) => {
-    const query = "SELECT namaKategori AS category FROM kategori";
-    conn.query(query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const categories = [];
-        for (let row of result) {
-          categories.push(row.category);
-        }
-        resolve(categories);
-      }
-    });
-  });
 };
 
 const checkEmail = (conn, email)=>{
@@ -113,7 +80,8 @@ const checkUsername = (conn, username)=>{
 const insertData = (conn, firstName, lastName, username, email, password)=>{
     return new Promise((resolve, reject)=>{
         const date = new Date();
-        conn.query('INSERT INTO Publik (password, username, firstName, lastName, emailPengguna, accountCreatedDate) VALUES (?, ?, ?, ?, ?, ?)', [password, username, firstName, lastName, email, date],(err, result)=>{
+        const fotoPath = '../img/user-no-profile.png';
+        conn.query('INSERT INTO Publik (password, username, firstName, lastName, emailPengguna, accountCreatedDate, fotoProfile) VALUES (?, ?, ?, ?, ?, ?, ?)', [password, username, firstName, lastName, email, date, fotoPath],(err, result)=>{
             if(err){
                 reject(err);
             }
@@ -175,6 +143,7 @@ app.post("/signup", async (req, res) => {
         // validasi database
         const signedUpEmail = await checkEmail(await dbConnect(), email);
         const signedUpUsername = await checkUsername(await dbConnect(), username);
+
         // belum ada pengguna dengan email tersebut
         if(signedUpEmail.length == 0 && signedUpUsername.length == 0){
             //cek password match
@@ -183,9 +152,11 @@ app.post("/signup", async (req, res) => {
                 insertData(await dbConnect(), firstName, lastName, username, email, password).then(async (result)=>{
                     const signedUpData = await checkEmail(await dbConnect(), email);
                     req.session.logged_in = true;
+                    req.session.email = email;
                     req.session.username = signedUpData[0].username;
-                    req.session.idPengguna = signedUpData[0].idPengguna;
+                    req.session.idPengguna = signedUpData[0].id;
                     req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
+                    req.session.role = 1;
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -253,8 +224,9 @@ app.post("/login", async(req,res)=>{
             if(registeredPassword == password){
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
+                req.session.email = email;
                 req.session.username = signedUpEmail[0].username;
-                req.session.idPengguna = signedUpEmail[0].idPengguna;
+                req.session.idPengguna = signedUpEmail[0].id;
                 req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
                 res.redirect('/dashboard-public');
             }
@@ -277,55 +249,8 @@ app.post("/login", async(req,res)=>{
     }
 });
 
-app.get("/account-publik", async(req,res)=>{
-    res.render('account-publik',{
-        user: req.session.username
-    });
-})
-app.get("/filter", async (req, res) => {
-    try {
-        const conn = await dbConnect();
-        const searchParams = req.query.search || "";
-        const selectedBrand = req.query.brand || "";
-        const selectedCategory = req.query.category || "";
-        const page = parseInt(req.query.page) || 1;
-        const itemsPerPage = 3;
-        
-        const brands = await getBrands(conn);
-        const categories = await getCategories(conn);
-        
-        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
-        const totalProducts = products.length;
-        const totalPages = Math.ceil(totalProducts / itemsPerPage);
-        
-        const accounts = await getAccountData(conn, searchParams);
-        
-        const paginatedProducts = [];
-        const start = (page - 1) * itemsPerPage;
-        const end = Math.min(start + itemsPerPage, products.length);
-
-        for (let i = start; i < end; i++) {
-            paginatedProducts.push(products[i]);
-        }
-
-        res.render('filter', {
-            user: req.session.username, 
-            brands,
-            categories,
-            // subCategories,
-            products: paginatedProducts,
-            accounts,
-            currentPage: page,
-            totalPages: totalPages
-        });
-    } catch (error) {
-        console.error(error);
-        res.status(500).render('error', { message: 'Internal Server Error' });
-    }
-});
-
-
-export { dbConnect };
+app.get("/my-account", render_my_account);
+app.get("/account-publik", render_account_publik);
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
