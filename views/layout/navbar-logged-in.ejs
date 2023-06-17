@@ -6,11 +6,8 @@
             <a href="/"><span>Dashboard</span></a>
             <a href="">Top 10</a>
         </div>
-        <div method="GET" id="navbar-logged-in-right-feature">
-            <form action="/review">
-                <input type="text" name="search" id="navbar-search" placeholder="Search">
-                <input type="image" src="../img/magnifying-glass-solid.svg" alt="magnifying-glass" id="search-logo">
-            </form>
+        <div id="navbar-logged-in-right-feature">
+            <%- include('./search.ejs') %>
             <hr>
             <p>Welcome, </p> <a href="./account-publik" id="user-logged-in"> <%= user %></a>
         </div>

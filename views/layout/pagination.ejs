@@ -1,0 +1,23 @@
+<% if (products.length > 0) { %>
+    <div class="pagination">
+        <% if (currentPage > 1) { %>
+            <a href="/filter?page=<%= currentPage - 1 %>" class='pagination-navigation'>&laquo; Previous</a>
+        <% } else { %>
+            <a class="disabled">&laquo; Previous</a>
+        <% } %>
+        
+        <% for (let i = 1; i <= totalPages; i++) { %>
+            <% if (i === currentPage) { %>
+                <a class="active" href="/filter?page=<%= i %>"><%= i %></a>
+            <% } else { %>
+                <a href="/filter?page=<%= i %>"><%= i %></a>
+            <% } %>
+        <% } %>
+        
+        <% if (currentPage < totalPages) { %>
+            <a href="/filter?page=<%= currentPage + 1 %>" class='pagination-navigation'>Next &raquo;</a>
+        <% } else { %>
+            <a class="disabled">Next &raquo;</a>
+        <% } %>
+    </div>
+<% } %>
