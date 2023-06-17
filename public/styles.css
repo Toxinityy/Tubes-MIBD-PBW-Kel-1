@@ -8,9 +8,6 @@ body{
 h1{
     font-size: 55px;
 }
-h1,h2,h3,h4,p{
-    color: #323232;
-}
 ::placeholder{
     color: 6E6E6E;
     font-weight: lighter;
@@ -54,7 +51,6 @@ button:hover{
     -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     margin-bottom: 20px;
-    padding: 5px;
 }
 #navbar hr{
     margin: 0px 20px 0px 40px;
@@ -102,12 +98,9 @@ button:hover{
     box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
-    /*disini*/
     margin-bottom: 5px;
     position: absolute;
     width: 100vw;
-/*     margin-bottom: 20px;
-    padding: 2px 5px; */
 }
 #navbar-logged-in hr{
     margin: 0px 20px 0px 40px;
@@ -124,13 +117,7 @@ button:hover{
     margin-right: 20px;
     text-decoration: none;
     color: #1E1E1E;
-}
-#navbar-logged-in #user-logged-in{
-    font-weight: bold;
-    font-style: normal;
-    margin-right: 20px;
-    color: #1E1E1E;
-    margin-left: 5px;
+
 }
 #navbar-logged-in span{
     font-weight: bold;
@@ -142,35 +129,6 @@ button:hover{
 #navbar-logged-in #navbar-logged-in-right-feature{
     margin-left: auto;
     margin-right: 20px;
-}
-
-#navbar-search-input{
-    border: none;
-}
-#navbar-search-input::placeholder{
-    font-style: normal;
-    font-weight: bold;
-    text-align: right;
-    color: #1E1E1E;
-    font-size: 14px;
-}
-#navbar-search-input form{
-    width: 15px;
-    margin: 10px;
-    border: none;
-    padding: 0px;
-    height: 0px;
-    font-size: 14px;
-    padding: 0px;
-    display: flex;
-}
-#navbar-search{
-    display: flex;
-}
-#search-logo{
-    width: 15px;
-    border: none;
-    margin-left: 5px;
 }
 
 /* ------- signup.ejs ------- */
@@ -208,7 +166,7 @@ button:hover{
 .signup-form-section{
     display: flex;
     flex-direction: column;
-    margin: 15px 0px 15px 0px;
+    margin: 15px 100px 15px 0px;
 }
 .signup-form-section label{
     font-size: 14px;    
@@ -222,7 +180,6 @@ button:hover{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    /*disini*/
     margin: 15px 100px 15px 0px;
 }
 #signup-input-firstName{
@@ -290,11 +247,290 @@ form input,input[type="submit"]{
     color: red;
 }
 
+
+/* ------- my-account.ejs ------- */
+
+#myaccount-content{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#myaccount-profil-content{
+    display: flex;
+    align-items: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    width: 90vw;
+    height: 56vh;
+    border-radius: 30px;
+    top: 28vh;
+    left: 5vw;
+    justify-content: center;
+    position: absolute;
+}
+#myaccount-profil-outerbox{
+    display: grid;
+    grid-template-areas:"profilimg profilimg"
+                        "profiluname profiluname"
+                        "profilfollowers profilfollowing";
+    width: 20vw;
+}
+#myaccount-followers{
+    display: flex;
+    grid-area: profilfollowers;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-self: start;
+    margin-top: 20px;
+}
+#myaccount-following{
+    display: flex;
+    grid-area: profilfollowing;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-self: end;
+    margin-top: 20px;
+}
+#myaccount-username p{
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+#myaccount-username{
+    display: flex;
+    grid-area: profiluname;
+    justify-content: center;
+    align-items: start;
+}
+.myaccount-follow-number{
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+}
+.myaccount-follow-text{
+    color: #A0A0A0;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+#img-myaccount-profil{
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+}
+#myaccount-profile-image{
+    display: flex;
+    grid-area: profilimg;
+    justify-content: center;
+    align-items: end;
+}
+.myaccount-kotak-tas{
+    display: flex;
+    height: auto;
+    width: 65vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
+}
+.img-myaccount-tas{
+    width: 28%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0px;
+    box-sizing: border-box;
+    scale: 80%;
+    align-self: center;
+}
+.myaccount-container-review-text{
+    align-self: center;
+    display: grid;
+    grid-template-rows: auto auto;
+    margin-bottom: 20px;
+    width: 72%;
+    margin-right: 30px;
+    box-sizing: border-box;
+}
+.myaccount-kotak-tas-header{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: 10px;
+}
+.myaccount-kotak-tas-header-right{
+    display: flex;
+    align-items: center;
+}
+.myaccount-kotak-tas-content{
+    display: flex;
+    flex-direction: row;
+}
+.myaccount-kotak-tas-content-left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+}
+.myaccount-kotak-tas-content-right{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    justify-content: center;
+}
+.myaccount-kategori-tas{
+    background-color: #617A55;
+    border-radius: 20px;
+}
+.myaccount-kategori-tas p{
+    background-color: #617A55;
+    color: #FFFEF9;
+    margin: 4px;
+    border-radius: 20px;
+}
+#myaccount-timeline-content{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100vh;
+    width: 80vw;
+    height: 70vh;
+    visibility: visible;
+}
+#myaccount-list-tas{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+#myaccount-timeline-content h1{
+    position: relative;
+    left: 50px;
+    margin-top: 0;
+}
+
+#myaccount-followers-list-box{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100vh;
+    width: 50vw;
+    height: 80vh;
+    visibility: hidden;
+}
+#myaccount-followers-list-header h1{
+    position: relative;
+    margin-top: 0;
+}
+.myaccount-img-profil-followers{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+.myaccount-username-profil-followers{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+#myaccount-followers-list-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#myaccount-followers-list-content{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.myaccount-followers-person-box{
+    display: flex;
+    height: auto;
+    width: 45vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+#myaccount-following-list-box{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100vh;
+    width: 50vw;
+    height: 80vh;
+    visibility: hidden;
+}
+#myaccount-following-list-header h1{
+    position: relative;
+    margin-top: 0;
+}
+.myaccount-img-profil-following{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+.myaccount-username-profil-following{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+#myaccount-following-list-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#myaccount-following-list-content{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.myaccount-following-person-box{
+    display: flex;
+    height: auto;
+    width: 45vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
 /* ------- account-publik.ejs ------- */
 #img-sand-background{
     width: 100vw;
     height: 61vh;
     object-fit: cover;
+}
+#bg-under-img{
+    width: 100vw;
+    height: 39vh;
+    object-fit: cover;
+}
+#account-publik-conten{
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 #account-publik-profil-content{
     display: flex;
@@ -305,18 +541,285 @@ form input,input[type="submit"]{
     width: 90vw;
     height: 56vh;
     border-radius: 30px;
-    position: absolute;
     top: 28vh;
     left: 5vw;
+    justify-content: center;
+    position: absolute;
+}
+#account-publik-profil-outerbox{
+    display: grid;
+    grid-template-areas:"profilimg profilimg"
+                        "profiluname profiluname"
+                        "profilfollowers profilfollowing"
+                        "buttonfollow buttonfollow";
+    width: 20vw;
+}
+#account-publik-profile-image{
+    display: flex;
+    grid-area: profilimg;
+    justify-content: center;
+    align-items: end;
+}
+#img-account-publik-profil{
+    border-radius: 50%;
+    width: 75px;
+    height: 75px;
+}
+#account-publik-username p{
+    color: black;
+    font-size: 20px;
+    font-weight: bold;
+    margin: 0;
+}
+#account-publik-username{
+    display: flex;
+    grid-area: profiluname;
+    justify-content: center;
+    align-items: start;
+}
+#account-publik-followers{
+    display: flex;
+    grid-area: profilfollowers;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-self: start;
+    margin-top: 20px;
+}
+#account-publik-following{
+    display: flex;
+    grid-area: profilfollowing;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+    align-self: end;
+    margin-top: 20px;
+}
+.account-publik-follow-number{
+    color: black;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0;
+}
+.account-publik-follow-text{
+    color: #A0A0A0;
+    font-size: 12px;
+    font-weight: bold;
+    margin: 0;
+}
+#account-publik-follow-button{
+    display: flex;
+    grid-area: buttonfollow;
+    justify-content: center;
+    margin-top: 20px;
+}
+.not-followed input[type="submit"]{
+    background-color: #617A55;
+    color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+    border: 1px #B5B5B5 solid;
+    font-size: 16px;
+    font-weight: bold;    
+    width: 18vw;
+}
+.followed input[type="submit"]{
+    background-color: #FFFEF9;
+    color: #617A55;
+    border-radius: 5px;
+    height: 30px;
+    border: 1px #B5B5B5 solid;
+    font-size: 16px;
+    font-weight: bold;
+    width: 18vw;
 }
 #account-publik-timeline-content{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
     top: 100vh;
+    width: 80vw;
+    height: 70vh;
+    left: 10vw;
+    visibility: visible;
+}
+#account-publik-timeline-content h1{
+    position: relative;
+    left: 50px;
+    margin-top: 0;
+}
+#account-publik-list-tas{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.account-publik-kotak-tas{
+    display: flex;
+    height: auto;
+    width: 65vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 25px;
+    margin-bottom: 25px;
 }
 
-/* ------- login-admin.ejs ------- */
-#admin-login{
+.img-account-publik-tas{
+    width: 28%;
+    height: 100%;
+    object-fit: contain;
+    margin: 0px;
+    box-sizing: border-box;
     scale: 80%;
-    width: 60vw;
-    height: 100vh;
-    object-fit: cover;
+    align-self: center;
+}
+
+.account-publik-container-review-text{
+    align-self: center;
+    display: grid;
+    grid-template-rows: auto auto;
+    margin-bottom: 20px;
+    width: 72%;
+    margin-right: 30px;
+    box-sizing: border-box;
+}
+.account-publik-kotak-tas-header{
+    display: flex;
+    justify-content: space-between;
+    position: relative;
+    left: 10px;
+}
+.account-publik-kotak-tas-header-right{
+    display: flex;
+    align-items: center;
+}
+.account-publik-kotak-tas-content{
+    display: flex;
+    flex-direction: row;
+}
+.account-publik-kotak-tas-content-left{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+}
+.account-publik-kotak-tas-content-right{
+    display: flex;
+    flex-direction: column;
+    width: 75%;
+    justify-content: center;
+}
+.account-publik-kategori-tas{
+    background-color: #617A55;
+    border-radius: 20px;
+}
+.account-publik-kategori-tas p{
+    background-color: #617A55;
+    color: #FFFEF9;
+    margin: 4px;
+    border-radius: 20px;
+}
+#account-publik-followers-list-box{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100vh;
+    width: 50vw;
+    height: 80vh;
+    left: 25vw;
+    visibility: hidden;
+}
+#account-publik-followers-list-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#account-publik-followers-list-header h1{
+    position: relative;
+    margin-top: 0;
+}
+#account-publik-followers-list-content{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.account-publik-followers-person-box{
+    display: flex;
+    height: auto;
+    width: 45vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+.account-publik-img-profil-followers{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+.account-publik-username-profil-followers{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
+}
+#account-publik-following-list-box{
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+    top: 100vh;
+    width: 50vw;
+    height: 80vh;
+    left: 25vw;
+    visibility: hidden;
+}
+#account-publik-following-list-header{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#account-publik-following-list-header h1{
+    position: relative;
+    margin-top: 0;
+}
+#account-publik-following-list-content{
+    display: flex;
+    flex-direction: column;
+    overflow: auto;
+}
+.account-publik-following-person-box{
+    display: flex;
+    height: auto;
+    width: 45vw;
+    align-self: center;
+    box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
+    border-radius: 30px;
+    margin-top: 15px;
+    margin-bottom: 15px;
+    align-items: center;
+}
+
+.account-publik-img-profil-following{
+    width: 60px;
+    height: 60px;
+    margin: 5px;
+    box-sizing: border-box;
+    border-radius: 30px;
+}
+.account-publik-username-profil-following{
+    color: black;
+    font-size: 16px;
+    font-weight: bold;
+    margin-left: 10px;
 }
