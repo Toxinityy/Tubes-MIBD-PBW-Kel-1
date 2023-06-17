@@ -8,17 +8,91 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <script type="text/javascript" src="../publicaccount.js" defer></script>
         <title>Account Page</title>
     </head>
     <body>
         <%- include('./layout/navbar-logged-in.ejs') %>
         <img src="../img/sand-background.jpg" alt="Sand Background" id="img-sand-background">
+        <div id="bg-under-img"></div>
         <div id="account-publik-content">
             <div id="account-publik-profil-content">
-                <button></button>
+                <div id="account-publik-profil-outerbox">
+                    <div id="account-publik-profile-image">
+                        <img src="<%= foto %>" alt="Profile Picture" id="img-account-publik-profil">
+                    </div>
+                    <div id="account-publik-username">
+                        <p><%- username %></p>
+                    </div>
+                    <div id="account-publik-followers" class="account-publik-follow">
+                        <p id="account-publik-followers-number" class="account-publik-follow-number"><%- followersnum %></p>
+                        <p id="account-publik-followers-text" class="account-publik-follow-text">Followers</p>
+                    </div>
+                    <div id="account-publik-following" class="account-publik-follow">
+                        <p id="account-publik-following-number" class="account-publik-follow-number"><%- followingsnum %></p>
+                        <p id="account-publik-following-text" class="account-publik-follow-text">Following</p>
+                    </div>
+                    <div id="account-publik-follow-button" class="<%= statusFollow %>">
+                        <input type="submit" value="<%= followText %>">
+                    </div>
+                </div>
             </div>
             <div id="account-publik-timeline-content">
                 <h1>Timeline</h1>
+                <div id="account-publik-list-tas">
+                    <% for(let review of reviews){ %>
+                    <div class="account-publik-kotak-tas" id="account-publik-review-button" name="tas" data-value="<%= review.idTas %>">
+                        <img src="<%= review.foto %>" alt="Bag" class="img-account-publik-tas">
+                        <div class="account-publik-container-review-text">
+                            <div class="account-publik-kotak-tas-header">
+                                <div class="account-publik-kotak-tas-header-left">                        
+                                    <h2 class="account-publik-nama-tas"><%- review.namaTas %></h2>
+                                </div>
+                                <div class="account-publik-kotak-tas-header-right">                        
+                                    <p class="account-publik-post-time"><%- review.currentDate.toDateString() %></p>
+                                </div>
+                            </div>
+                            <div class="account-publik-kotak-tas-content">
+                                <div class="account-publik-kotak-tas-content-left">                        
+                                    <h3 class="account-publik-review-rating-tas"><%- review.rateValue %>/5</h3>
+                                    <div class="account-publik-kategori-tas">
+                                        <p><%- review.namaKategori %></p>
+                                    </div>
+                                </div>
+                                <div class="account-publik-kotak-tas-content-right">                        
+                                    <p class="account-publik-review-dekripsi-tas"><%- review.reviewDescription %></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div id="account-publik-followers-list-box">
+                <div id="account-publik-followers-list-header">
+                    <h1>Followers</h1>
+                </div>
+                <div id="account-publik-followers-list-content">
+                    <% for(let follower of followerList){ %>
+                    <div id="account-publik-person-button" class="account-publik-followers-person-box" name="person" data-value="<%= follower.idFollow %>">
+                        <img src="<%= follower.fotoProfile %>" class="account-publik-img-profil-followers">
+                        <p class="account-publik-username-profil-followers"><%- follower.username %></p>
+                    </div>
+                    <% } %>
+                </div>
+            </div>
+            <div id="account-publik-following-list-box">
+                <div id="account-publik-following-list-header">
+                    <h1>Following</h1>
+                </div>
+                <div id="account-publik-following-list-content">
+                    <% for(let following of followingList){ %>
+                    <div id="account-publik-person-button" class="account-publik-following-person-box" name="person" data-value="<%= following.idFollowing %>">
+                        <img src="<%= following.fotoProfile %>" class="account-publik-img-profil-following">
+                        <p class="account-publik-username-profil-following"><%- following.username %></p>
+                    </div>
+                    <% } %>
+                </div>
             </div>
         </div>
     </body>
