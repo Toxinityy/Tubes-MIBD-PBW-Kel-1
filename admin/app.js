@@ -5,7 +5,6 @@ const mysql = require('mysql');
 const csv = require('csv-parser');
 const fs = require('fs');
 
-// Menggunakan EJS sebagai view engine
 app.set('view engine', 'ejs');
 
 // Konfigurasi koneksi database
