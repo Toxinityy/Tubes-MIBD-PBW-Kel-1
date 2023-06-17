@@ -8,6 +8,9 @@ body{
 h1{
     font-size: 55px;
 }
+h1,h2,h3,h4,p{
+    color: #323232;
+}
 ::placeholder{
     color: 6E6E6E;
     font-weight: lighter;
@@ -181,17 +184,17 @@ button:hover{
     margin-left: auto;
     margin-right: 20px;
 }
-#navbar-search{
+#navbar-search-input{
     border: none;
 }
-#navbar-search::placeholder{
+#navbar-search-input::placeholder{
     font-style: normal;
     font-weight: bold;
     text-align: right;
     color: #1E1E1E;
     font-size: 14px;
 }
-#navbar-search form{
+#navbar-search-input form{
     width: 15px;
     margin: 10px;
     border: none;
@@ -201,7 +204,7 @@ button:hover{
     padding: 0px;
     display: flex;
 }
-#navbar-logged-in-right-feature form{
+#navbar-search{
     display: flex;
 }
 #search-logo{
