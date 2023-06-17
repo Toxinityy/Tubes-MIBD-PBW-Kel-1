@@ -21,7 +21,7 @@
           <br>
           <% for (let brand of brands) { %>
             <div class="rows">
-              <input type="checkbox" name="brand" value="<%= brand %>">
+              <input type="radio" name="brand" value="<%= brand %>">
               <label><%= brand %></label><br>
             </div>
           <% } %>
@@ -36,20 +36,11 @@
             </div>
           <% } %>
         </div>
-        <div class="sections" id="filter-sub-category">
-          <label for="sub_category">Sub Categories:</label>
-          <br>
-          <% for (let subCategory of subCategories) { %>
-            <div class="rows">
-              <input type="checkbox" name="sub_category" value="<%= subCategory %>">
-              <label><%= subCategory %></label><br>
-            </div>
-          <% } %>
-        </div>
-          <button type="submit">Submit</button>
+        <button type="submit">Submit</button>
       </form>
     </div>
     <%- include('./layout/product.ejs') %>
+    <%- include('./layout/accountSearch.ejs') %>
   </div>
 </body>
 </html>
