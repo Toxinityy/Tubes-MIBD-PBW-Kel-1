@@ -5,6 +5,7 @@ import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
 import { getProductData } from './models/productModel.js'
+import { getAccountData } from "./models/accountSearchModel.js";
 
 const PORT = 8080;
 const app = express();
@@ -49,24 +50,6 @@ const dbConnect = () => {
     });
 };
 
-const getTas = (conn, filter) =>{
-    return new Promise((resolve, reject) => {
-        let query = "SELECT * FROM tas";
-        let params = [];
-        if(filter){
-            query += "WHERE namaTas LIKE ?";
-            params.push(`%${filter}%`);
-        }
-        conn.query(query, params, (err, result) => {
-            if (err) {
-              reject(err);
-            } else {
-              resolve(result[0].count);
-            }
-          });
-    });
-};
-
 const getBrands = (conn) => {
   return new Promise((resolve, reject) => {
     const query = "SELECT namaMerk AS brand FROM merk";
@@ -96,23 +79,6 @@ const getCategories = (conn) => {
           categories.push(row.category);
         }
         resolve(categories);
-      }
-    });
-  });
-};
-
-const getSubCategories = (conn) => {
-  return new Promise((resolve, reject) => {
-    const query = "SELECT namaSubKategori AS sub_category FROM subkategori";
-    conn.query(query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const subCategories = [];
-        for (let row of result) {
-          subCategories.push(row.sub_category);
-        }
-        resolve(subCategories);
       }
     });
   });
@@ -304,28 +270,45 @@ app.get("/account-publik", async(req,res)=>{
 app.get("/filter", async (req, res) => {
     try {
         const conn = await dbConnect();
-        const filter = req.query.filter || "";
+        const searchParams = req.query.search || "";
+        const selectedBrand = req.query.brand || "";
+        const selectedCategory = req.query.category || "";
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
         
         const brands = await getBrands(conn);
         const categories = await getCategories(conn);
-        const subCategories = await getSubCategories(conn);
-        const tas = await getTas(conn, filter, brands, categories, subCategories);
+        
+        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        
+        const accounts = await getAccountData(conn, searchParams);
+        
+        const paginatedProducts = [];
+        const start = (page - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, products.length);
 
-        const products = await getProductData(conn);
+        for (let i = start; i < end; i++) {
+            paginatedProducts.push(products[i]);
+        }
 
         res.render('filter', {
             user: req.session.username, 
             brands,
             categories,
-            subCategories,
-            tas,
-            products
+            // subCategories,
+            products: paginatedProducts,
+            accounts,
+            currentPage: page,
+            totalPages: totalPages
         });
     } catch (error) {
-            console.error(error);
-            res.status(500).render('error', { message: 'Internal Server Error' });
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
     }
-}); 
+});
+
 
 export { dbConnect };
 
