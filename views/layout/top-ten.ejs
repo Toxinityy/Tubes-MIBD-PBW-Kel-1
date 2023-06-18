@@ -6,7 +6,7 @@
             <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-1">
             <p class="number">1</p>
             <div id="top-1-body" class="background-top-1">
-                <div class="hidden-info">
+                <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
                     <h3><%= topten_review[i].namaTas %></h3>
                     <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
                     <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
@@ -21,7 +21,7 @@
                         <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-<%= i+1 %>">
                         <p class="number-second"><%= i+1 %></p>
                         <div id="top-<%= i+1 %>-body">
-                            <div class="hidden-info">
+                            <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
                                 <h3><%= topten_review[i].namaTas %></h3>
                                 <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
                                 <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
@@ -37,7 +37,7 @@
                         <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-<%= i+1 %>">
                         <p><span class="number-third"><%= i+1 %></span></p>
                         <div id="top-<%= i+1 %>-body">
-                            <div class="hidden-info">
+                            <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
                                 <h3><%= topten_review[i].namaTas %></h3>
                                 <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
                                 <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
@@ -50,3 +50,9 @@
         </div>
     </div>
 </div>
+
+<script>
+    function redirectToProductDetails(productId) {
+        window.location.href = `/product-details?id=${productId}`;
+    }
+</script>
