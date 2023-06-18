@@ -1,0 +1,20 @@
+/* Main */
+.hidden {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 90vh;
+    padding-left: 100px;
+}
+
+form > label {
+    margin-top: -50px;
+}
+
+/* Category */
+
