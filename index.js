@@ -168,8 +168,11 @@ const checkMiddlewareAdminPublic = (req, res, next)=>{
 
 app.get("/", async(req,res) => {
     // const conn = await dbConnect();
-    if(req.session.logged_in){
+    if(req.session.logged_in && req.session.role == 1){
         res.redirect('/dashboard-public');
+    }
+    else if(req.session.logged_in && req.session.role == 2){
+        res.redirect('dashboard-admin'); //redirect ke dashboard admin
     }
     else{
         res.render("home");
