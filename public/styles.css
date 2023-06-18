@@ -14,19 +14,19 @@ h1{
 }
 
 /* -------- Home.ejs --------*/
-button, input[type="submit"]{
+button, input[type="submit"]:not(#logout-button){
     background-color: #617A55;
     color: #FFFEF9;
     border-radius: 5px;
     height: 30px;
     cursor: pointer;
 }
-button:hover{
+button:hover:not(#logout-button){
     background-color: #495c40;
     color: #d4d4d0;
     transition: 0.3s;
 }
-input[type="submit"]:hover{
+input[type="submit"]:hover:not(#logout-button){
     background-color: #495c40;
     color: #d4d4d0;
     transition: 0.3s;
@@ -103,6 +103,7 @@ input[type="submit"]:hover{
     -webkit-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     -moz-box-shadow: 0px 4px 10px 1px rgba(0,0,0,0.2);
     margin-bottom: 20px;
+    padding: 5px;
 }
 #navbar hr{
     margin: 0px 20px 0px 40px;
@@ -170,6 +171,13 @@ input[type="submit"]:hover{
     color: #1E1E1E;
 
 }
+#navbar-logged-in #user-logged-in{
+    font-weight: bold;
+    font-style: normal;
+    margin-right: 20px;
+    color: #1E1E1E;
+    margin-left: 5px;
+}
 #navbar-logged-in span{
     font-weight: bold;
 }
@@ -185,7 +193,21 @@ input[type="submit"]:hover{
     height: 25px;
     width: 25px;
     object-fit: contain;
-
+}
+#logout-button{
+    background-color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+    border: none;
+}
+#navbar-search{
+    display: flex;
+}
+#search-logo{
+    width: 15px;
+    border: none;
+    margin-left: 5px;
+}
 #navbar-search-input{
     border: none;
 }
@@ -249,7 +271,7 @@ input[type="submit"]:hover{
 #signup-input-name{
     display: flex;
     justify-content: space-between;
-    margin: 15px 0px 15px 0px;
+    margin: 15px 100px 15px 0px;
 }
 #signup-input-firstName{
     width: 50%;
@@ -336,6 +358,7 @@ form input,input[type="submit"]{
     left: 5vw;
     justify-content: center;
     position: absolute;
+    background-color: #FFFEFF;
 }
 #myaccount-profil-outerbox{
     display: grid;
@@ -639,6 +662,7 @@ form input,input[type="submit"]{
     left: 5vw;
     justify-content: center;
     position: absolute;
+    background-color: #FFFEFF;
 }
 #account-publik-profil-outerbox{
     display: grid;
@@ -766,6 +790,7 @@ form input,input[type="submit"]{
     object-fit: contain;
     margin: 0px;
     box-sizing: border-box;
+}
 /* ------- login-admin.ejs ------- */
 #admin-login{
     scale: 80%;
@@ -817,6 +842,7 @@ form input,input[type="submit"]{
     color: #FFFEF9;
     margin: 4px;
     border-radius: 20px;
+    padding: 3px 5px;
 }
 #account-publik-followers-list-box{
     display: flex;
