@@ -4,6 +4,8 @@ import express from "express";
 import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
+import { getProductData } from './models/productModel.js'
+import { getAccountData } from "./models/accountSearchModel.js";
 
 const PORT = 8080;
 const app = express();
@@ -48,6 +50,40 @@ const dbConnect = () => {
     });
 };
 
+const getBrands = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaMerk AS brand FROM merk";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const brands = [];
+        for (let row of result) {
+          brands.push(row.brand);
+        }
+        resolve(brands);
+      }
+    });
+  });
+};
+
+const getCategories = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaKategori AS category FROM kategori";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const categories = [];
+        for (let row of result) {
+          categories.push(row.category);
+        }
+        resolve(categories);
+      }
+    });
+  });
+};
+
 const checkEmail = (conn, email)=>{
     return new Promise((resolve, reject)=>{
         conn.query('SELECT * FROM Publik WHERE emailPengguna = ?', [email],(err, result)=>{
@@ -90,7 +126,12 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
 
 app.get("/", async(req,res) => {
     // const conn = await dbConnect();
-    res.render("home");
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("home");
+    }
 });
 app.get("/login", async(req,res) => {
     if(req.session.logged_in){
@@ -105,12 +146,17 @@ app.get("/login", async(req,res) => {
     }
 });
 app.get("/signup", async(req,res) => {
-    res.render("signup", {
-        emailProblem: '',
-        usernameProblem: '',
-        passwordProblem: '',
-        signupProblem: ''
-    });
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("signup", {
+            emailProblem: '',
+            usernameProblem: '',
+            passwordProblem: '',
+            signupProblem: ''
+        });
+    }
 });
 app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
@@ -129,13 +175,17 @@ app.post("/signup", async (req, res) => {
         // validasi database
         const signedUpEmail = await checkEmail(await dbConnect(), email);
         const signedUpUsername = await checkUsername(await dbConnect(), username);
-
         // belum ada pengguna dengan email tersebut
         if(signedUpEmail.length == 0 && signedUpUsername.length == 0){
             //cek password match
             if(password == confirmpassword){ // jika match
                 // insert database
-                insertData(await dbConnect(), firstName, lastName, username, email, password).then((result)=>{
+                insertData(await dbConnect(), firstName, lastName, username, email, password).then(async (result)=>{
+                    const signedUpData = await checkEmail(await dbConnect(), email);
+                    req.session.logged_in = true;
+                    req.session.username = signedUpData[0].username;
+                    req.session.idPengguna = signedUpData[0].idPengguna;
+                    req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -181,7 +231,7 @@ app.post("/signup", async (req, res) => {
             emailProblem: '',
             usernameProblem: '',
             passwordProblem: '',
-            signupProblem: 'Please insert all the form'
+            signupProblem: 'Please insert all fields'
         });
     }
 });
@@ -204,6 +254,8 @@ app.post("/login", async(req,res)=>{
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
                 req.session.username = signedUpEmail[0].username;
+                req.session.idPengguna = signedUpEmail[0].idPengguna;
+                req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
                 res.redirect('/dashboard-public');
             }
             else{
@@ -220,7 +272,7 @@ app.post("/login", async(req,res)=>{
         res.render("login-public",{
             emailProblem: '',
             passwordProblem: '',
-            loginProblem: 'Please insert all the form'
+            loginProblem: 'Please insert all fields'
         });
     }
 });
@@ -230,6 +282,135 @@ app.get("/account-publik", async(req,res)=>{
         user: req.session.username
     });
 })
+app.get("/filter", async (req, res) => {
+    try {
+        const conn = await dbConnect();
+        const searchParams = req.query.search || "";
+        const selectedBrand = req.query.brand || "";
+        const selectedCategory = req.query.category || "";
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
+        
+        const brands = await getBrands(conn);
+        const categories = await getCategories(conn);
+        
+        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        
+        const accounts = await getAccountData(conn, searchParams);
+        
+        const paginatedProducts = [];
+        const start = (page - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, products.length);
+
+        for (let i = start; i < end; i++) {
+            paginatedProducts.push(products[i]);
+        }
+
+        res.render('filter', {
+            user: req.session.username, 
+            brands,
+            categories,
+            // subCategories,
+            products: paginatedProducts,
+            accounts,
+            currentPage: page,
+            totalPages: totalPages
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
+    }
+});
+
+
+//INPUT
+app.get('/input', async(req, res) => {
+    try{
+        res.status(200).render('input');
+    }catch(err) {
+        res.status(400), send(err);
+    }
+});
+
+app.post("/submit", async (req, res) => {
+    try {
+      const selectedPage = req.body.page;
+  
+      if (selectedPage === "minReview") {
+        res.status(200).redirect("/setMinimumReview");
+      } else if (selectedPage === "category") {
+        res.status(200).redirect("/setCategory");
+      } else if (selectedPage === "subCategory") {
+        res.status(200).redirect("/setSubCategory");
+      } else if (selectedPage === "import") {
+        res.status(200).redirect("import");
+      } else {
+        res.status(200).render("input");
+        // res.render("/input"); // Jika pilihan tidak valid, kembali ke halaman input
+      }
+    } catch (err) {
+      res.status(400).send(err);
+    }
+});
+  
+//minREVIEW
+app.get('/setMinimumReview', async(req, res) => {
+    try{
+        res.status(200).render('minimumReview');
+    }catch(err) {
+        res.status(400), send(err);
+    }
+});
+
+
+//CAT
+app.get('/setCategory', async(req, res) => {
+    try{
+        const categoriesQuery = 'SELECT * FROM Kategori';
+    
+        await connection.query(categoriesQuery, function(err, categories) {
+        if (err) throw err;
+            res.status(200).render('setCategory', { categories: categories, allowNewCategory: true });
+        });
+    
+    }catch(err){
+        res.status(400). send(err);
+    }
+});
+
+
+//SUB_CAT
+app.get('/setSubCategory', async(req, res) => {
+    try{
+        // Mendapatkan daftar sub-kategori dari database berdasarkan kategori yang dipilih sebelumnya (misalnya menggunakan query SQL SELECT)
+        const subCategories = [
+            { idSubKategori: 1, namaSubKategori: 'Sub-Category 1' },
+            { idSubKategori: 2, namaSubKategori: 'Sub-Category 2' },
+            { idSubKategori: 3, namaSubKategori: 'Sub-Category 3' }
+        ];
+    
+        res.status(200).render('setSubCategory', { subCategories: subCategories });
+    }catch(err){
+        res.status(400). send(err);
+    }
+    
+});
+    
+
+//IMPORT
+app.get('/import', async(req, res) => {
+    try{
+        res.tatus(200).render('import');
+    }catch(err){
+        res.status(400). send(err);
+    }
+    
+});
+
+
+export { dbConnect };
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
