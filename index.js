@@ -55,7 +55,7 @@ const upload = multer({storage: fileStorage, fileFilter: fileFilter});
 const pool = mysql.createPool({
     user: "root",
     password: "",
-    database: "IDE",
+    database: "Review_Tas",
     host: "localhost",
 });
 
@@ -129,6 +129,39 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
         });
     });
 };
+const getBrands = (conn) => {
+    return new Promise((resolve, reject) => {
+      const query = "SELECT namaMerk AS brand FROM merk";
+      conn.query(query, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          const brands = [];
+          for (let row of result) {
+            brands.push(row.brand);
+          }
+          resolve(brands);
+        }
+      });
+    });
+  };
+  
+  const getCategories = (conn) => {
+    return new Promise((resolve, reject) => {
+      const query = "SELECT namaKategori AS category FROM kategori";
+      conn.query(query, (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          const categories = [];
+          for (let row of result) {
+            categories.push(row.category);
+          }
+          resolve(categories);
+        }
+      });
+    });
+  };
 
 const checkMiddlewarePublicOnly = (req, res, next)=>{
     if(req.session.logged_in && req.session.role==1){
@@ -174,7 +207,7 @@ const getTopTenRating = (conn) =>{
         });
     });
 };
-app.get("/", async(req,res) => {
+app.get("/", async(req,res, next) => {
   try {
     if(req.session.logged_in){
         res.redirect('/dashboard-public');
@@ -343,7 +376,7 @@ app.post("/login", async(req,res)=>{
 app.get("/my-account", checkMiddlewarePublicOnly, render_my_account);
 app.get("/account-publik", checkMiddlewarePublicOnly, render_account_publik);
 app.post("/follow-person", checkMiddlewarePublicOnly, follow_transaction);
-app.get('/logout', checkMiddlewarePublicOnly, async (req, res)=>{
+app.post('/logout', checkMiddlewarePublicOnly, async (req, res)=>{
     req.session.logged_in = false;
     req.session.email = null;
     req.session.username = null;
@@ -412,6 +445,11 @@ app.get("/filter", async (req, res) => {
 
 app.get('/product-details?:id', productDetailsController);
 app.post("/add-review", addReviewController);
+
+// 404 handler
+app.use((req, res, next) => {
+    res.status(404).render("404", { url: req.originalUrl });
+});
 
 export { dbConnect };
 
