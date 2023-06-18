@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="card-tas.css">
+    <link rel="stylesheet" href="filters.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+    <title><%= productDetails[0].namaTas %></title>
+    <script src="https://kit.fontawesome.com/142154afcd.js" crossorigin="anonymous"></script>
+</head>
+<body>
+  <!-- <%= //console.log(req.session.username) %> -->
+  <% if (req.session.username === undefined) { %>
+    <%- include('./layout/navbar.ejs') %>
+  <% } else { %>
+    <%- include('./layout/navbar-logged-in.ejs') %>
+  <% } %>
+
+  <!-- Debugging output -->
+  <!-- <pre><%= //JSON.stringify(productDetails[0], null, 2) %></pre> -->
+  <div class="global-wrapper">
+    <div class="card-wrapper">
+      <!-- <p>ID: <%= //productDetails[0].idTas %></p> -->
+      <!-- <p>Color: <%= //productDetails[0].warna %></p> -->
+      <img src="<%= productDetails[0].foto %>" alt="<%= productDetails[0].namaTas %>" class="product-search-image"> 
+      <div class="card-content">
+        <h1><%= productDetails[0].namaTas %></h1>
+        <div class="product-average-counter">
+          <h3><%= productDetails[0].averageRateValue %></h3>
+          <p>from</p>
+          <h4><%= productDetails[0].personCounter %> <span>Ratings</span></h4>
+        </div>
+        <ul class="sub_category">
+            <% for (let sub_category of subCategories) { %>
+            <li> <%= sub_category.namaSubKategori %> </li>
+            <% } %>
+            <li><%= productDetails[0].namaMerk %></li>
+            <li><%= productDetails[0].panjang %> x <%= productDetails[0].lebar %> x <%= productDetails[0].tinggi %></li>
+        </ul>
+        <p><%= productDetails[0].deskripsi %></p>
+      </div>
+    </div>
+
+    <!-- Review -->
+    <div>
+      <div class="review-header">
+        <h2>Reviews</h2>
+        <% if (req.session.username !== undefined) { %>
+          <button id="addReviewButton">Add Review</button>
+        <% } %>
+      </div>
+      <% for (let i = 0; i < reviews.length; i += 2) { %>
+      <div class="review-row">
+        <div class="review" id="review <%= reviews[i].idReview %>">
+          <img src="<%= reviews[i].fotoProfile %>" alt="user-foto">
+          <div class="review-content">
+            <div class="username-rating">
+              <h3><%= reviews[i].username %></h3>
+              <h3><span><%= reviews[i].rateValue %>/5</span></h3>
+            </div>
+            <p><%= reviews[i].reviewDescription %></p>
+          </div>
+        </div>
+        <% if (i + 1 < reviews.length) { %>
+        <div class="review" id="review <%= reviews[i + 1].idReview %>">
+          <img src="<%= reviews[i + 1].fotoProfile %>" alt="user-foto">
+          <div class="review-content">
+            <div class="username-rating">
+              <h3><%= reviews[i + 1].username %></h3>
+              <h3><span><%= reviews[i].rateValue %>/5</span></h3>
+            </div>
+            <p><%= reviews[i + 1].reviewDescription %></p>
+          </div>
+        </div>
+        <% } %>
+      </div>
+      <% } %>
+    </div>
+    
+    <!-- Add Review Pop up Form -->
+    <div id="reviewFormPopup" class="review-form-popup">
+      <div class="review-form-container">
+        <div class="review-form-header">
+          <h2>Rating</h2>
+          <button id="closeReviewFormButton" class="close-button"><i class="fas fa-times"></i></button>
+        </div>
+        <form method="POST" action="/add-review">
+          <input type="hidden" name="productId" value="<%= productDetails[0].idTas %>">
+          <div class="rating-container">
+            <input type="radio" id="rating1" name="rating" value="1">
+            <label for="rating1">1</label>
+            <input type="radio" id="rating2" name="rating" value="2">
+            <label for="rating2">2</label>
+            <input type="radio" id="rating3" name="rating" value="3">
+            <label for="rating3">3</label>
+            <input type="radio" id="rating4" name="rating" value="4">
+            <label for="rating4">4</label>
+            <input type="radio" id="rating5" name="rating" value="5">
+            <label for="rating5">5</label>
+          </div>
+          
+          <h2>Reviews</h2>
+          <textarea id="reviewsInput" name="reviews" rows="4" cols="50"></textarea>
+        
+          <button type="submit">Submit</button>
+        </form>
+      </div>
+    </div>
+    <script>
+      const addReviewButton = document.getElementById('addReviewButton');
+      const reviewFormPopup = document.getElementById('reviewFormPopup');
+      const closeReviewFormButton = document.getElementById('closeReviewFormButton');
+
+      addReviewButton.addEventListener('click', () => {
+        reviewFormPopup.style.display = 'block';
+      });
+
+      closeReviewFormButton.addEventListener('click', () => {
+        event.preventDefault();
+        reviewFormPopup.style.display = 'none';
+      });
+    </script>
+</body>
+</html>

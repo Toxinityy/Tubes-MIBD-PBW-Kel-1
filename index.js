@@ -7,6 +7,10 @@ import memoryStore from 'memorystore';
 import multer from 'multer';
 import { render_account_publik, follow_transaction} from './account_controller/account.js';
 import { render_my_account} from './my_account_controller/myaccount-controller.js';
+import { getProductData } from './models/productModel.js'
+import { getAccountData } from "./models/accountSearchModel.js";
+import productDetailsController from './controllers/product-details_controller.js';
+import addReviewController from './controllers/add-review_controller.js';
 
 const PORT = 8080;
 const app = express();
@@ -153,15 +157,38 @@ const checkMiddlewareAdminPublic = (req, res, next)=>{
     }
 }
 
+const getTopTenRating = (conn) =>{
+    return new Promise((resolve, reject)=>{
+        let query = "SELECT t.idTas, t.namaTas, t.foto, t.deskripsi, t.warna, t.panjang, t.lebar, t.tinggi, ";
+        query += "ROUND(AVG(r.rateValue), 2) AS averageRateValue, COUNT(r.id) AS personCounter";
+        query += " FROM Tas t JOIN Review r ON t.idTas = r.idTas";
+        query += " GROUP BY t.namaTas, t.foto ";
+        query += " ORDER BY personCounter DESC, averageRateValue DESC";
+
+        conn.query(query, (err, result) => {
+            if (err) {
+              reject(err);
+            } else {
+              resolve(result);
+            }
+        });
+    });
+};
 app.get("/", async(req,res) => {
-    // const conn = await dbConnect();
+  try {
     if(req.session.logged_in){
         res.redirect('/dashboard-public');
     }
     else{
-        res.render("home");
+        const conn = await dbConnect();
+        const topten_review = await getTopTenRating(conn);
+        res.render("home", { topten_review });
     }
+  } catch (err) {
+      next(err);
+  }
 });
+  
 app.get("/login", async(req,res) => {
     if(req.session.logged_in){
         res.redirect('/dashboard-public');
@@ -175,24 +202,22 @@ app.get("/login", async(req,res) => {
     }
 });
 app.get("/signup", async(req,res) => {
-    if(req.session.logged_in){
-        res.redirect('/dashboard-public');
-    }
-    else{
-        res.render("signup", {
-            emailProblem: '',
-            usernameProblem: '',
-            passwordProblem: '',
-            signupProblem: ''
-        });
-    }
+    res.render("signup", {
+        emailProblem: '',
+        usernameProblem: '',
+        passwordProblem: '',
+        signupProblem: ''
+    });
 });
 app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
 });
 app.get("/dashboard-public", checkMiddlewareAdminPublic, async(req,res) => {
+    const conn = await dbConnect();
+    const topten_review = await getTopTenRating(conn);
     res.render("dashboard-public",{
-        user: req.session.username
+        user: req.session.username,
+        topten_review
     })
 });
 app.post("/signup", async (req, res) => {
@@ -219,6 +244,7 @@ app.post("/signup", async (req, res) => {
                     req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
                     req.session.foto = signedUpData[0].fotoProfile;
                     req.session.role = 1;
+                  
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -264,7 +290,7 @@ app.post("/signup", async (req, res) => {
             emailProblem: '',
             usernameProblem: '',
             passwordProblem: '',
-            signupProblem: 'Please insert all fields'
+            signupProblem: 'Please insert all the form'
         });
     }
 });
@@ -292,6 +318,7 @@ app.post("/login", async(req,res)=>{
                 req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
                 req.session.foto = signedUpEmail[0].fotoProfile;
                 req.session.role = 1;
+
                 res.redirect('/dashboard-public');
             }
             else{
@@ -308,7 +335,7 @@ app.post("/login", async(req,res)=>{
         res.render("login-public",{
             emailProblem: '',
             passwordProblem: '',
-            loginProblem: 'Please insert all fields'
+            loginProblem: 'Please insert all the form'
         });
     }
 });
@@ -339,6 +366,54 @@ app.post('/my-account', upload.single('image'), async (req, res)=>{
         res.status(400).send('Tidak ada gambar yang diunggah!');
     }
 });
+
+app.get("/filter", async (req, res) => {
+    try {
+        const conn = await dbConnect();
+        const searchParams = req.query.search || "";
+        const selectedBrand = req.query.brand || "";
+        const selectedCategory = req.query.category || "";
+        const page = parseInt(req.query.page) || 1;
+        const itemsPerPage = 3;
+        
+        const brands = await getBrands(conn);
+        const categories = await getCategories(conn);
+        
+        const products = await getProductData(conn, searchParams, selectedBrand, selectedCategory);
+        const totalProducts = products.length;
+        const totalPages = Math.ceil(totalProducts / itemsPerPage);
+        
+        const accounts = await getAccountData(conn, searchParams);
+        
+        const paginatedProducts = [];
+        const start = (page - 1) * itemsPerPage;
+        const end = Math.min(start + itemsPerPage, products.length);
+
+        for (let i = start; i < end; i++) {
+            paginatedProducts.push(products[i]);
+        }
+
+        res.render('filter', {
+            user: req.session.username, 
+            brands,
+            categories,
+            // subCategories,
+            products: paginatedProducts,
+            accounts,
+            currentPage: page,
+            totalPages: totalPages,
+            req
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).render('error', { message: 'Internal Server Error' });
+    }
+});
+
+app.get('/product-details?:id', productDetailsController);
+app.post("/add-review", addReviewController);
+
+export { dbConnect };
 
 app.listen(PORT, () => {
     console.log(`Server is listening on port: ${PORT}!`);
