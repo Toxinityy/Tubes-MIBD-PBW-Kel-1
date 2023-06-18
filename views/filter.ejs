@@ -12,7 +12,8 @@
     <title>Search</title>
 </head>
 <body>
-  <% if (req.session.username === undefined) { %>
+  <%= //console.log(req.session.username) %>
+  <% if (req.session.username === null || req.session.username === undefined) { %>
     <%- include('./layout/navbar.ejs') %>
   <% } else { %>
     <%- include('./layout/navbar-logged-in.ejs') %>
