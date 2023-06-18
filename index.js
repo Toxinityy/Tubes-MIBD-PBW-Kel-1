@@ -313,10 +313,10 @@ const getBag = conn => {
         })
     })
 }
-//dapetin review
-const getReview = conn => {
+//dapetin reviewStatistic
+const getRevStat = conn => {
     return new Promise((resolve, reject) => {
-        const query = 'SELECT * FROM Review';
+        const query = 'SELECT K.namaKategori as namaKategori, AVG(R.rateValue) AS averageRating FROM Review R JOIN Tas T ON R.idTas = T.idTas JOIN TasSubKat TS ON T.idTas = TS.idTas JOIN SubKategori SK ON TS.idSubKategori = SK.idSubKategori JOIN Kategori K ON SK.idKategori = K.idKategori GROUP BY K.namaKategori';
         conn.query(query, (err, result) => {
             if(err){
                 reject(err);
@@ -326,22 +326,18 @@ const getReview = conn => {
         })
     })
 }
+
 app.get('/stat', async(req, res) => {
     const conn = await dbConnect();
     const brands = await getBrands(conn);
     const category = await getKategori(conn);
     const subcategory = await getSubKat(conn);
-    const review = await getReview(conn);
-    const query = 'SELECT t.namaK'
-    // SELECT t.namaTas, AVG(r.rateValue) AS meanRating
-    // FROM Tas t
-    // JOIN Review r ON t.idTas = r.idTas
-    // GROUP BY t.idTas
+    const revStat = await getRevStat(conn);
     res.render('admin/stat', {
         brands: brands,
         category: category,
         subcategory: subcategory,
-        review: review
+        revStat: revStat
     });
 });
 app.get('/additems', async(req, res) => {
@@ -358,4 +354,8 @@ app.get('/additems', async(req, res) => {
         designer: designer,
         bags: bags
     });
+});
+
+app.get('/import', async(req, res) => {
+    res.render('admin/import');
 });

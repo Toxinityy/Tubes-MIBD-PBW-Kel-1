@@ -25,29 +25,38 @@
                     <div id="brands">
                         <label for="lbrands" id="lbrands">Brand</label><br>
                         <p>select one or more option</p>
-                        <select width=300 style="width: 200px" name="brands" id="selbrand" size="5" multiple>
+                        <div class="brand-container">
                             <% for(const row of brands) { %>
-                                <option value="<%- row.idMerk %>"><%= row.namaMerk %></option>
-                            <% } %>
-                        </select>
+                                <input type="checkbox" id="<%- row.idMerk %>">
+                                <label for="<%- row.idMerk %>">
+                                    <%= row.namaMerk %>
+                                </label><br>
+                                <% } %>
+                        </div>
                     </div>
                     <div id="category">
                         <label for="lcat" id="lcat">Category</label><br>
                         <p>select one option</p>
-                        <select width=300 style="width: 200px" name="category" id="selcat" size="5">
+                        <div class="category-container">
                             <% for(const row of category) { %>
-                                <option value="<%- row.idKategori %>"><%= row.namaKategori %></option>
-                            <% } %>
-                        </select>
+                                <input type="radio" name="category" id="<%- row.idKategori %>">
+                                <label for="<%- row.idKategori %>">
+                                    <%= row.namaKategori %>
+                                </label><br>
+                                <% } %>
+                        </div>
                     </div>
                     <div id="subcategory">
                         <label for="lsubcat" id="lsubcat">SubCategory</label><br>
                         <p>select one or more option</p>
-                        <select width=300 style="width: 200px" name="subcategory" id="selsub" size="5" multiple>
+                        <div class="subcategory-container">
                             <% for(const row of subcategory) { %>
-                                <option value="<%- row.idSubKategori %>"><%= row.namaSubKategori %></option>
-                            <% } %>
-                        </select>
+                                <input type="checkbox" id="<%- row.idSubKategori %>">
+                                <label for="<%- row.idSubKategori %>">
+                                    <%= row.namaSubKategori %>
+                                </label><br>
+                                <% } %>
+                        </div>
                     </div>
                 </form>
             </div>
@@ -57,6 +66,22 @@
                     <!-- <canvas id="mychart" style="width:100%;max-width:700px"></canvas> -->
                     <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
                     <script>
+                        // const revStat = revStat;
+                        // const labels = revStat.map(row => row.namaKategori);
+                        // const values = revStat.map(row => row.averageRating);
+
+                        // new Chart('myChart', {
+                        //     type: 'scatter',
+                        //     data: {
+                        //         labels: labels,
+                        //         datasets: [{
+                        //             data: values,
+                        //             pointRadius: 4,
+                        //             pointBackgroundColor: "rgb(0,0,255)"
+                        //         }]
+                        //     }
+                        // })
+
                         var xyValues = [
                           {x:50, y:7},
                           {x:60, y:8},

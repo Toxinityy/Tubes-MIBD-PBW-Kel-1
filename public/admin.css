@@ -107,6 +107,12 @@ button:hover{
     display: flex;
     margin: 15px;
 }
+.brand-container, .category-container, .subcategory-container { 
+    border:2px solid #ccc;
+    width: 200px;
+    height: 100px;
+    overflow-y: auto;
+}
 #brands, #category, #subcategory{
     flex-direction: column;
     margin: 15px;
@@ -123,6 +129,37 @@ button:hover{
 #upper-content{
     display: flex;
     align-items: center;
+}
+/* ------- import.ejs ------- */
+#outer-border {
+    border-width: thin;
+    border-radius: 10px;
+    border-style: solid;
+    padding: 25px;
+    width: 600px;
+}
+#lcsv, #ldata {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+#db-input {
+    margin-bottom: 15px;
+}
+#db-input, #csv-input {
+    resize: none;
+    overflow-y: auto;
+}
+#ldata,
+#data-form,
+#db-input,
+#lcsv,
+#csv-form,
+#csv-input {
+  margin-bottom: 10px;
+}
+#data-form, #csv-form {
+    margin-top: 5px;
 }
 
 /* ------- additems.ejs ------- */
