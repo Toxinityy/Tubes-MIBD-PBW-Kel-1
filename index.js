@@ -182,7 +182,7 @@ app.get("/login", async(req,res) => {
     if(req.session.logged_in && req.session == 1){
         res.redirect('/dashboard-public');
     }
-    else if(req.session.role == 2){
+    else if(req.session.logged_in && req.session.role == 2){
         res.redirect('/dashboard-admin'); //redirect ke dashboard admin
     }
     else{
@@ -197,7 +197,7 @@ app.get("/signup", async(req,res) => {
     if(req.session.logged_in && req.session.role == 1){
         res.redirect('/dashboard-public');
     }
-    else if(req.session.role == 2){
+    else if(req.session.logged_in && req.session.role == 2){
         res.redirect('/dashboard-admin'); //redirect ke dashboard admin
     }
     else{
@@ -213,7 +213,7 @@ app.get('/adminlogin', async(req, res) => {
     if(req.session.logged_in && req.session.role == 2){
         res.redirect('/dashboard-admin'); //redirect ke dashboard admin
     }
-    else if(req.session.role == 1){
+    else if(req.session.logged_in && req.session.role == 1){
         res.redirect('/dashboard-public');
     }
     else{
