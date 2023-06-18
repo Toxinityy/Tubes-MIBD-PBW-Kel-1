@@ -178,8 +178,11 @@ app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
 });
 app.get("/dashboard-public", async(req,res) => {
+    const conn = await dbConnect();
+    const topten_review = await getTopTenRating(conn);
     res.render("dashboard-public",{
-        user: req.session.username
+        user: req.session.username,
+        topten_review
     })
 });
 app.post("/signup", async (req, res) => {
