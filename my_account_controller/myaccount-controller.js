@@ -1,4 +1,7 @@
 import mysql from "mysql";
+import multer from 'multer';
+import path from "path";
+
 const pool = mysql.createPool({
     user: "root",
     password: "",
@@ -82,31 +85,16 @@ const getReview = (conn, idPengguna)=>{
         });
     });
 };
-
-const getFotoProfil = (conn, idPengguna)=>{
-    return new Promise((resolve, reject)=>{
-        conn.query('SELECT Publik.fotoProfile FROM Publik WHERE Publik.id = ?', [idPengguna], (err, result)=>{
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(result);
-            }
-        });
-    });
-};
-
-
 export async function render_my_account(req, res) {
+    res.setHeader('Cache-Control', 'no-store');
     const following = await getFollowing(await dbConnect(), req.session.idPengguna);
     const followers = await getFollowers(await dbConnect(), req.session.idPengguna);
     const dataReview = await getReview(await dbConnect(), req.session.idPengguna);
     const followerList = await getFollowerList(await dbConnect(), req.session.idPengguna);
     const followingList = await getFollowingList(await dbConnect(), req.session.idPengguna);
-    const fotoProfile = await getFotoProfil(await dbConnect(), req.session.idPengguna);
 
     res.render('my-account',{
-        foto: fotoProfile[0].fotoProfile,
+        foto: req.session.foto,
         user: req.session.username,
         followersnum: followers[0].Followers,
         followingnum: following[0].Following,
@@ -115,3 +103,4 @@ export async function render_my_account(req, res) {
         followingList: followingList
     });
 }
+ 
