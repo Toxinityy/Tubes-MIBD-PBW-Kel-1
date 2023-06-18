@@ -327,10 +327,6 @@ VALUES
 -- Insert reviews for idTas = 10
 INSERT INTO Review (rateValue, reviewDescription, idTas, id, currentDate)
 VALUES
-  (5, 'Versatile and spacious backpack, highly recommended.', 10, 1, CURDATE() - INTERVAL FLOOR(RAND() * 365) DAY),
-  (4, 'Fashionable and practical tote bag.', 10, 2, CURDATE() - INTERVAL FLOOR(RAND() * 365) DAY),
-  (3, 'Decent handbag, but the quality could be better.', 10, 3, CURDATE() - INTERVAL FLOOR(RAND() * 365) DAY),
-  (4, 'Durable and functional backpack for outdoor activities.', 10, 4, CURDATE() - INTERVAL FLOOR(RAND() * 365) DAY),
   (5, 'Compact and stylish crossbody bag for everyday use.', 10, 5, CURDATE() - INTERVAL FLOOR(RAND() * 365) DAY);
 
 -- Insert reviews for idTas = 11
