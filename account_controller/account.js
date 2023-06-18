@@ -83,22 +83,9 @@ const getReview = (conn, idPengguna)=>{
     });
 };
 
-const getFotoProfil = (conn, idPengguna)=>{
+const getProfilData = (conn, idPengguna)=>{
     return new Promise((resolve, reject)=>{
-        conn.query('SELECT Publik.fotoProfile FROM Publik WHERE Publik.id = ?', [idPengguna], (err, result)=>{
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(result);
-            }
-        });
-    });
-};
-
-const getUsername = (conn, idPengguna)=>{
-    return new Promise((resolve, reject)=>{
-        conn.query('SELECT Publik.username FROM Publik WHERE Publik.id = ?', [idPengguna], (err, result)=>{
+        conn.query('SELECT * FROM Publik WHERE Publik.id = ?', [idPengguna], (err, result)=>{
             if(err){
                 reject(err);
             }
@@ -122,41 +109,88 @@ const isFollowed = (conn, idPengguna1, idPengguna2)=>{
     });
 };
 
+const doFollow = (conn, idPengguna1, idPengguna2)=>{
+    return new Promise((resolve, reject)=>{
+        conn.query('INSERT INTO Teman (idFollow, idFollowing) VALUES (?, ?)', [idPengguna1, idPengguna2], (err, result)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(result);
+            }
+        });
+    });
+};
+
+const undoFollow = (conn, idPengguna1, idPengguna2)=>{
+    return new Promise((resolve, reject)=>{
+        conn.query('DELETE FROM Teman WHERE Teman.idFollow = ? AND Teman.idFollowing = ?', [idPengguna1, idPengguna2], (err, result)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(result);
+            }
+        });
+    });
+};
+
 export async function render_account_publik(req, res) {
+    res.setHeader('Cache-Control', 'no-store');
     const idPengguna = req.query.id;
     const idSaya = req.session.idPengguna;
+    if(idPengguna==idSaya){
+        res.redirect('my-account');
+    }else{
+        const con = await dbConnect();
+        
+        const dataProfil = await getProfilData(con, idPengguna);
+        const following = await getFollowing(con, idPengguna);
+        const followers = await getFollowers(con, idPengguna);
+        const dataReview = await getReview(con, idPengguna);
+        const followerList = await getFollowerList(con, idPengguna);
+        const followingList = await getFollowingList(con, idPengguna);
 
-    const username = await getUsername(await dbConnect(), idPengguna);
-    const following = await getFollowing(await dbConnect(), idPengguna);
-    const followers = await getFollowers(await dbConnect(), idPengguna);
-    const dataReview = await getReview(await dbConnect(), idPengguna);
-    const followerList = await getFollowerList(await dbConnect(), idPengguna);
-    const followingList = await getFollowingList(await dbConnect(), idPengguna);
-    const fotoProfile = await getFotoProfil(await dbConnect(), idPengguna);
+        let status = '';
+        let textFollow = '';
 
-    let status = '';
-    let textFollow = '';
+        const followData = await isFollowed(con, idSaya, idPengguna);
+        if(followData.length==0){
+            status = 'not-followed';
+            textFollow = 'Follow';
+        }
+        else{
+            status = 'followed';
+            textFollow = 'Followed';
+        }
 
-    const followData = await isFollowed(await dbConnect(), idSaya, idPengguna);
-    if(followData.length==0){
-        status = 'not-followed';
-        textFollow = 'Follow';
+        res.render('account-publik',{
+            user: req.session.username,
+            foto: dataProfil[0].fotoProfile,
+            username: dataProfil[0].username,
+            followersnum: followers[0].Followers,
+            followingsnum: following[0].Following,
+            statusFollow: status,
+            followText: textFollow,
+            userId: dataProfil[0].id,
+            reviews: dataReview,
+            followerList: followerList,
+            followingList: followingList,
+        });
+    }
+}
+
+
+
+export async function follow_transaction(req, res){
+    const idPengguna = req.body.idUser;
+    const idSaya = req.session.idPengguna;
+    const followStatus = await isFollowed(await dbConnect(), idSaya, idPengguna);
+    if(followStatus.length==0){
+        await doFollow(await dbConnect(), idSaya, idPengguna);
     }
     else{
-        status = 'followed';
-        textFollow = 'Followed';
+        await undoFollow(await dbConnect(), idSaya, idPengguna);
     }
-
-    res.render('account-publik',{
-        user: req.session.username,
-        foto: fotoProfile[0].fotoProfile,
-        username: username[0].username,
-        followersnum: followers[0].Followers,
-        followingsnum: following[0].Following,
-        statusFollow: status,
-        followText: textFollow,
-        reviews: dataReview,
-        followerList: followerList,
-        followingList: followingList
-    });
+    res.redirect(`/account-publik?id=${idPengguna}`);
 }
