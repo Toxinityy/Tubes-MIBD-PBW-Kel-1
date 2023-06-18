@@ -8,11 +8,13 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <script type="text/javascript" src="../publicaccount.js" defer></script>
         <title>Account Page</title>
     </head>
     <body>
-        <%- include('./layout/navbar-logged-in.ejs') %>
         <img src="../img/sand-background.jpg" alt="Sand Background" id="img-sand-background">
         <div id="bg-under-img"></div>
         <div id="account-publik-content">
@@ -33,7 +35,10 @@
                         <p id="account-publik-following-text" class="account-publik-follow-text">Following</p>
                     </div>
                     <div id="account-publik-follow-button" class="<%= statusFollow %>">
-                        <input type="submit" value="<%= followText %>">
+                        <form method="post" id="account=publik-form-follow" action="/follow-person">
+                            <input type="hidden" name="idUser" value="<%= userId %>">
+                            <input type="submit" value="<%= followText %>" id="follow-button<%= userId %>">
+                        </form>
                     </div>
                 </div>
             </div>
@@ -41,7 +46,7 @@
                 <h1>Timeline</h1>
                 <div id="account-publik-list-tas">
                     <% for(let review of reviews){ %>
-                    <div class="account-publik-kotak-tas" id="account-publik-review-button" name="tas" data-value="<%= review.idTas %>">
+                    <div class="account-publik-kotak-tas" id="account-publik-tas<%= review.idTas %>">
                         <img src="<%= review.foto %>" alt="Bag" class="img-account-publik-tas">
                         <div class="account-publik-container-review-text">
                             <div class="account-publik-kotak-tas-header">
@@ -74,7 +79,7 @@
                 </div>
                 <div id="account-publik-followers-list-content">
                     <% for(let follower of followerList){ %>
-                    <div id="account-publik-person-button" class="account-publik-followers-person-box" name="person" data-value="<%= follower.idFollow %>">
+                    <div id="account-publik-follower<%= follower.idFollow %>" class="account-publik-followers-person-box">
                         <img src="<%= follower.fotoProfile %>" class="account-publik-img-profil-followers">
                         <p class="account-publik-username-profil-followers"><%- follower.username %></p>
                     </div>
@@ -87,7 +92,7 @@
                 </div>
                 <div id="account-publik-following-list-content">
                     <% for(let following of followingList){ %>
-                    <div id="account-publik-person-button" class="account-publik-following-person-box" name="person" data-value="<%= following.idFollowing %>">
+                    <div id="account-publik-following<%= following.idFollowing %>" class="account-publik-following-person-box">
                         <img src="<%= following.fotoProfile %>" class="account-publik-img-profil-following">
                         <p class="account-publik-username-profil-following"><%- following.username %></p>
                     </div>

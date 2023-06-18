@@ -8,6 +8,9 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+        <meta http-equiv="Pragma" content="no-cache">
+        <meta http-equiv="Expires" content="0">
         <script type="text/javascript" src="../myaccount_client.js" defer></script>
         <title>Account Page</title>
     </head>
@@ -19,6 +22,13 @@
             <div id="myaccount-profil-content">
                 <div id="myaccount-profil-outerbox">
                     <div id="myaccount-profile-image">
+                        <form id="myaccount-upload-img-form" action="/my-account" enctype="multipart/form-data">
+                            <input type="file" id="myaccount-image-input">
+                            <div id="img-upload-button-section">
+                                <button id="cancel-img-upload-button">Cancel</button>
+                                <input type="submit" value="Upload" id="myaccount-submit-img" name="image">
+                            </div>
+                        </form>
                         <img src="<%= foto %>" alt="Profile Picture" id="img-myaccount-profil">
                     </div>
                     <div id="myaccount-username">
@@ -38,7 +48,7 @@
                 <h1>Timeline</h1>
                 <div id="myaccount-list-tas">
                     <% for(let review of reviews){ %>
-                    <div class="myaccount-kotak-tas" id="myaccount-review-button" name="tas" data-value="<%= review.idTas %>">
+                    <div class="myaccount-kotak-tas" id="myaccount-tas<%= review.idTas %>">
                         <img src="<%= review.foto %>" alt="Bag" class="img-myaccount-tas">
                         <div class="myaccount-container-review-text">
                             <div class="myaccount-kotak-tas-header">
@@ -71,7 +81,7 @@
                 </div>
                 <div id="myaccount-followers-list-content">
                     <% for(let follower of followerList){ %>
-                    <div id="myaccount-person-button" class="myaccount-followers-person-box" name="person" data-value="<%= follower.idFollow %>">
+                    <div id="myaccount-follower<%= follower.idFollow %>" class="myaccount-followers-person-box">
                         <img src="<%= follower.fotoProfile %>" class="myaccount-img-profil-followers">
                         <p class="myaccount-username-profil-followers"><%- follower.username %></p>
                     </div>
@@ -84,7 +94,7 @@
                 </div>
                 <div id="myaccount-following-list-content">
                     <% for(let following of followingList){ %>
-                    <div id="myaccount-person-button" class="myaccount-following-person-box" name="person" data-value="<%= following.idFollowing %>">
+                    <div id="myaccount-following<%= following.idFollowing %>" class="myaccount-following-person-box">
                         <img src="<%= following.fotoProfile %>" class="myaccount-img-profil-following">
                         <p class="myaccount-username-profil-following"><%- following.username %></p>
                     </div>
