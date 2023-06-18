@@ -25,8 +25,15 @@
                 </div>
                 <div id="csv-import">
                     <label for="lcsv" id="lcsv">Import CSV</label>
-                    <form action="" method="POST" id="csv-form">
-                        <input type="file" id="file-csv">
+                    <form action="/import-csv" method="POST" id="csv-form" enctype="multipart/form-data">
+                        <input type="file" name="csvFile">
+                        <select name="table_name" id="merk">
+                            <option value="Designer">Designer</option>
+                            <option value="Kategori">Kategori</option>
+                            <option value="Merk">Merk</option>
+                            <option value="Tas">Tas</option>
+                            <option value="SubCategory">SubCategory</option>
+                        </select> 
                         <input type="submit" value="Upload CSV">
                     </form>
                     <textarea form="csv-form" name="csv-input" id="csv-input" cols="82" rows="10"></textarea>
