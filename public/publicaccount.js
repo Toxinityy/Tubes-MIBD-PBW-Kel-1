@@ -7,6 +7,17 @@ const timelineContent = document.querySelector("#account-publik-timeline-content
 const followersContent = document.querySelector("#account-publik-followers-list-box");
 const followingContent = document.querySelector("#account-publik-following-list-box");
 
+const formFollow = document.getElementById('account=publik-form-follow');
+const followButton = document.querySelector('#account-publik-follow-button input[type="submit"]');
+const userId = followButton.id.replace('follow-button',''); 
+
+function onSuccess(response){
+    return response.json();
+}
+function showResultPost(text){
+    console.log(text);
+}
+
 followersNumber.addEventListener('click', followersClicked);
 followersText.addEventListener('click', followersClicked);
 
@@ -29,15 +40,15 @@ const listFollowers = document.querySelectorAll('.account-publik-followers-perso
 const listFollowing = document.querySelectorAll('.account-publik-following-person-box');
 
 listFollowers.forEach(followerUser => {
-    followerUser.addEventListener('click', clickPerson);
+    followerUser.addEventListener('click', ()=>{
+        const idUser = followerUser.id.replace('account-publik-follower','');
+        window.location.href = `/account-publik?id=${idUser}`;
+    });
 });
 
 listFollowing.forEach(followingUser => {
-    followingUser.addEventListener('click', clickPerson);
+    followingUser.addEventListener('click', ()=>{
+        const idUser = followingUser.id.replace('account-publik-following','');
+        window.location.href = `/account-publik?id=${idUser}`;
+    });
 });
-
-function clickPerson(event){
-    console.log('clicked');
-    const idUser = event.target.dataset.value;
-    window.location.href = 'account-publik?id=' + idUser;
-}
