@@ -9,7 +9,10 @@
         <div id="navbar-logged-in-right-feature">
             <%- include('./search.ejs') %>
             <hr>
-            <p>Welcome, </p> <a href="./account-publik" id="user-logged-in"> <%= user %></a>
+            <p>Welcome, </p> <a href="./my-account" id="user-logged-in"> <%= user %></a>
+            <a href="/logout">
+                <img src="../img/logout-icon.png" alt="Log out icon" id="img-logout-icon">
+            </a>
         </div>
     </nav>
 </header>
