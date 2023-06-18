@@ -4,6 +4,9 @@ import express from "express";
 import session from "express-session";
 import crypto from "crypto";
 import memoryStore from 'memorystore';
+import multer from 'multer';
+import { render_account_publik, follow_transaction} from './account_controller/account.js';
+import { render_my_account} from './my_account_controller/myaccount-controller.js';
 import { getProductData } from './models/productModel.js'
 import { getAccountData } from "./models/accountSearchModel.js";
 import productDetailsController from './controllers/product-details_controller.js';
@@ -12,6 +15,24 @@ import addReviewController from './controllers/add-review_controller.js';
 const PORT = 8080;
 const app = express();
 const sessionStore = memoryStore(session);
+const fileStorage = multer.diskStorage({
+    destination: (req, file, cb) =>{
+        cb(null, 'public/img/');
+    },
+    filename: (req, file, cb) =>{
+        cb(null, new Date().getTime()+'-'+file.originalname);
+    }
+});
+
+const fileFilter = (req, file, cb)=>{
+    if(file.mimetype === 'image/png' || file.mimetype === 'image/jpg' || file.mimetype === 'image/jpeg'){
+        cb(null, true);
+    }
+    else{
+        cb(null, false);
+    }
+};
+
 app.use(
     session({
         cookie: {
@@ -23,15 +44,18 @@ app.use(
             checkPeriod: 1*60*60*1000
         }),
         secret: "my_secret",
-        resave: true,
-        saveUninitialized: true,
-        logged_in: false
+        resave: false,
+        saveUninitialized: false,
+        logged_in: false,
+        role: 0
     })
 );
+const upload = multer({storage: fileStorage, fileFilter: fileFilter});
+
 const pool = mysql.createPool({
     user: "root",
     password: "",
-    database: "review_tas",
+    database: "IDE",
     host: "localhost",
 });
 
@@ -50,40 +74,6 @@ const dbConnect = () => {
             }
         });
     });
-};
-
-const getBrands = (conn) => {
-  return new Promise((resolve, reject) => {
-    const query = "SELECT namaMerk AS brand FROM merk";
-    conn.query(query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const brands = [];
-        for (let row of result) {
-          brands.push(row.brand);
-        }
-        resolve(brands);
-      }
-    });
-  });
-};
-
-const getCategories = (conn) => {
-  return new Promise((resolve, reject) => {
-    const query = "SELECT namaKategori AS category FROM kategori";
-    conn.query(query, (err, result) => {
-      if (err) {
-        reject(err);
-      } else {
-        const categories = [];
-        for (let row of result) {
-          categories.push(row.category);
-        }
-        resolve(categories);
-      }
-    });
-  });
 };
 
 const checkEmail = (conn, email)=>{
@@ -112,10 +102,9 @@ const checkUsername = (conn, username)=>{
     });
 };
 
-const insertData = (conn, firstName, lastName, username, email, password)=>{
+const updateFoto = (conn, fotoPath, idPengguna)=>{
     return new Promise((resolve, reject)=>{
-        const date = new Date();
-        conn.query('INSERT INTO Publik (password, username, firstName, lastName, emailPengguna, accountCreatedDate) VALUES (?, ?, ?, ?, ?, ?)', [password, username, firstName, lastName, email, date],(err, result)=>{
+        conn.query('UPDATE Publik SET fotoProfile = ? WHERE id = ?', [fotoPath, idPengguna], (err, result)=>{
             if(err){
                 reject(err);
             }
@@ -125,6 +114,48 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
         });
     });
 };
+
+const insertData = (conn, firstName, lastName, username, email, password)=>{
+    return new Promise((resolve, reject)=>{
+        const date = new Date();
+        const fotoPath = '../img/user-no-profile.png';
+        conn.query('INSERT INTO Publik (password, username, firstName, lastName, emailPengguna, accountCreatedDate, fotoProfile) VALUES (?, ?, ?, ?, ?, ?, ?)', [password, username, firstName, lastName, email, date, fotoPath],(err, result)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(result);
+            }
+        });
+    });
+};
+
+const checkMiddlewarePublicOnly = (req, res, next)=>{
+    if(req.session.logged_in && req.session.role==1){
+        next();
+    }
+    else{
+        res.status(403).send();
+    }
+}
+
+const checkMiddlewareAdminOnly = (req, res, next)=>{
+    if(req.session.logged_in && req.session.role==2){
+        next();
+    }
+    else{
+        res.status(403).send();
+    }
+}
+
+const checkMiddlewareAdminPublic = (req, res, next)=>{
+    if(req.session.logged_in && (req.session.role==1 || req.session.role==2)){
+        next();
+    }
+    else{
+        res.status(403).send();
+    }
+}
 
 const getTopTenRating = (conn) =>{
     return new Promise((resolve, reject)=>{
@@ -143,16 +174,20 @@ const getTopTenRating = (conn) =>{
         });
     });
 };
-
-app.get("/", async (req, res, next) => {
-    try {
-      const conn = await dbConnect();
-      const topten_review = await getTopTenRating(conn);
-      res.render("home", { topten_review });
-    } catch (err) {
-      next(err);
+app.get("/", async(req,res) => {
+  try {
+    if(req.session.logged_in){
+        res.redirect('/dashboard-public');
     }
-  });
+    else{
+        const conn = await dbConnect();
+        const topten_review = await getTopTenRating(conn);
+        res.render("home", { topten_review });
+    }
+  } catch (err) {
+      next(err);
+  }
+});
   
 app.get("/login", async(req,res) => {
     if(req.session.logged_in){
@@ -177,7 +212,7 @@ app.get("/signup", async(req,res) => {
 app.get('/adminlogin', async(req, res) => {
     res.render('login-admin');
 });
-app.get("/dashboard-public", async(req,res) => {
+app.get("/dashboard-public", checkMiddlewareAdminPublic, async(req,res) => {
     const conn = await dbConnect();
     const topten_review = await getTopTenRating(conn);
     res.render("dashboard-public",{
@@ -200,7 +235,16 @@ app.post("/signup", async (req, res) => {
             //cek password match
             if(password == confirmpassword){ // jika match
                 // insert database
-                insertData(await dbConnect(), firstName, lastName, username, email, password).then((result)=>{
+                await insertData(await dbConnect(), firstName, lastName, username, email, password).then(async (result)=>{
+                    const signedUpData = await checkEmail(await dbConnect(), email);
+                    req.session.logged_in = true;
+                    req.session.email = email;
+                    req.session.username = signedUpData[0].username;
+                    req.session.idPengguna = signedUpData[0].id;
+                    req.session.namaLengkap = signedUpData[0].firstName+" "+signedUpData[0].lastName;
+                    req.session.foto = signedUpData[0].fotoProfile;
+                    req.session.role = 1;
+                  
                     // redirect ke dashboard public
                     res.redirect("/dashboard-public");
                 });
@@ -268,7 +312,13 @@ app.post("/login", async(req,res)=>{
             if(registeredPassword == password){
                 //jika pass sesuai maka login berhasil
                 req.session.logged_in = true;
+                req.session.email = email;
                 req.session.username = signedUpEmail[0].username;
+                req.session.idPengguna = signedUpEmail[0].id;
+                req.session.namaLengkap = signedUpEmail[0].firstName+" "+signedUpEmail[0].lastName;
+                req.session.foto = signedUpEmail[0].fotoProfile;
+                req.session.role = 1;
+
                 res.redirect('/dashboard-public');
             }
             else{
@@ -290,11 +340,32 @@ app.post("/login", async(req,res)=>{
     }
 });
 
-app.get("/account-publik", async(req,res)=>{
-    res.render('account-publik',{
-        user: req.session.username
-    });
-})
+app.get("/my-account", checkMiddlewarePublicOnly, render_my_account);
+app.get("/account-publik", checkMiddlewarePublicOnly, render_account_publik);
+app.post("/follow-person", checkMiddlewarePublicOnly, follow_transaction);
+app.get('/logout', checkMiddlewarePublicOnly, async (req, res)=>{
+    req.session.logged_in = false;
+    req.session.email = null;
+    req.session.username = null;
+    req.session.idPengguna = null;
+    req.session.namaLengkap = null;
+    req.session.foto = null;
+    req.session.role = 0;
+    res.redirect('/');
+});
+app.post('/my-account', upload.single('image'), async (req, res)=>{
+    if(req.file){
+        const fotoPath = '../img/'+req.file.filename;
+        const idPengguna = req.session.idPengguna;
+        await updateFoto(await dbConnect(), fotoPath, idPengguna);
+        let result = fotoPath;
+        req.session.foto = fotoPath;
+        res.send({response:result});
+    }
+    else {
+        res.status(400).send('Tidak ada gambar yang diunggah!');
+    }
+});
 
 app.get("/filter", async (req, res) => {
     try {
