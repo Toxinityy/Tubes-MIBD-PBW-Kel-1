@@ -11,6 +11,8 @@ const formFollow = document.getElementById('account=publik-form-follow');
 const followButton = document.querySelector('#account-publik-follow-button input[type="submit"]');
 const userId = followButton.id.replace('follow-button',''); 
 
+const buttonClose = document.querySelectorAll('.account-publik-close-button');
+
 function onSuccess(response){
     return response.json();
 }
@@ -38,6 +40,7 @@ function followingClicked(){
 const listFollowers = document.querySelectorAll('.account-publik-followers-person-box');
 
 const listFollowing = document.querySelectorAll('.account-publik-following-person-box');
+const listTas = document.querySelectorAll('.account-publik-kotak-tas');
 
 listFollowers.forEach(followerUser => {
     followerUser.addEventListener('click', ()=>{
@@ -52,3 +55,18 @@ listFollowing.forEach(followingUser => {
         window.location.href = `/account-publik?id=${idUser}`;
     });
 });
+
+listTas.forEach(productTas=>{
+    productTas.addEventListener('click', ()=>{
+        const idTas = productTas.id.replace('account-publik-tas','');
+        window.location.href = `/product-details?id=${idTas}`;
+    })
+});
+
+buttonClose.forEach(closeBut=>{
+    closeBut.addEventListener('click', ()=>{
+        timelineContent.style.visibility = 'visible';
+        followersContent.style.visibility = 'hidden';
+        followingContent.style.visibility = 'hidden';
+    })
+})

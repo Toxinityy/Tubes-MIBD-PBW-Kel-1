@@ -89,6 +89,19 @@ const checkEmail = (conn, email)=>{
     });
 };
 
+const checkEmailAdmin = (conn, email)=>{
+    return new Promise((resolve, reject)=>{
+        conn.query('SELECT * FROM Admin WHERE emailPengguna = ?', [email],(err, result)=>{
+            if(err){
+                reject(err);
+            }
+            else{
+                resolve(result);
+            }
+        });
+    });
+};
+
 const checkUsername = (conn, username)=>{
     return new Promise((resolve, reject)=>{
         conn.query('SELECT * FROM Publik WHERE username = ?', [username],(err, result)=>{
@@ -209,8 +222,11 @@ const getTopTenRating = (conn) =>{
 };
 app.get("/", async(req,res, next) => {
   try {
-    if(req.session.logged_in){
+    if(req.session.logged_in && req.session.role == 1){
         res.redirect('/dashboard-public');
+    }
+    else if(req.session.logged_in && req.session.role == 2){
+        res.redirect('/dashboard-admin'); //redirect ke dashboard admin
     }
     else{
         const conn = await dbConnect();
@@ -223,8 +239,11 @@ app.get("/", async(req,res, next) => {
 });
   
 app.get("/login", async(req,res) => {
-    if(req.session.logged_in){
+    if(req.session.logged_in && req.session == 1){
         res.redirect('/dashboard-public');
+    }
+    else if(req.session.logged_in && req.session.role == 2){
+        res.redirect('/dashboard-admin'); //redirect ke dashboard admin
     }
     else{
         res.render("login-public",{
@@ -235,15 +254,72 @@ app.get("/login", async(req,res) => {
     }
 });
 app.get("/signup", async(req,res) => {
-    res.render("signup", {
-        emailProblem: '',
-        usernameProblem: '',
-        passwordProblem: '',
-        signupProblem: ''
-    });
+    if(req.session.logged_in && req.session.role == 1){
+        res.redirect('/dashboard-public');
+    }
+    else if(req.session.logged_in && req.session.role == 2){
+        res.redirect('/dashboard-admin'); //redirect ke dashboard admin
+    }
+    else{
+        res.render("signup", {
+            emailProblem: '',
+            usernameProblem: '',
+            passwordProblem: '',
+            signupProblem: ''
+        });
+    }
 });
 app.get('/adminlogin', async(req, res) => {
+    if(req.session.logged_in && req.session.role == 2){
+        res.redirect('/dashboard-admin'); //redirect ke dashboard admin
+    }
+    else if(req.session.logged_in && req.session.role == 1){
+        res.redirect('/dashboard-public');
+    }
+    else{
+        res.render("login-admin", {
+            emailProblem: '',
+            passProblem: '',
+            submitProblem: ''
+        });
+    }
     res.render('login-admin');
+});
+app.post('/adminlogin', async(req, res)=>{
+    const{email, password} = req.body;
+    if(email != "" && password != ""){
+        const signedUpData = await checkEmailAdmin(await dbConnect(), email);
+        if(signedUpData.length==0){
+            res.render("login-admin", {
+                emailProblem: 'Email does not exists',
+                passProblem: '',
+                submitProblem: ''
+            });
+        }
+        else{
+            if(signedUpData[0].password == password){
+                //isi section yang butuh
+                req.session.logged_in = true;
+                req.session.email = email;
+                req.session.role = 2;
+                res.redirect('dashboard-admin'); //redirect dashboard public
+            }
+            else{
+                res.render("login-admin", {
+                    emailProblem: '',
+                    passProblem: 'Wrong password',
+                    submitProblem: ''
+                });
+            }
+        }
+    }
+    else{
+        res.render("login-admin", {
+            emailProblem: '',
+            passProblem: '',
+            submitProblem: 'Please insert all fields'
+        });
+    }
 });
 app.get("/dashboard-public", checkMiddlewareAdminPublic, async(req,res) => {
     const conn = await dbConnect();

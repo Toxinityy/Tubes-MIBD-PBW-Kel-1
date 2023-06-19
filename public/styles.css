@@ -518,7 +518,7 @@ form input,input[type="submit"]{
 }
 #myaccount-followers-list-header h1{
     position: relative;
-    margin-top: 0;
+    margin: 0;
 }
 .myaccount-img-profil-followers{
     width: 60px;
@@ -535,8 +535,9 @@ form input,input[type="submit"]{
 }
 #myaccount-followers-list-header{
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 #myaccount-followers-list-content{
     display: flex;
@@ -568,7 +569,7 @@ form input,input[type="submit"]{
 }
 #myaccount-following-list-header h1{
     position: relative;
-    margin-top: 0;
+    margin: 0;
 }
 .myaccount-img-profil-following{
     width: 60px;
@@ -585,8 +586,9 @@ form input,input[type="submit"]{
 }
 #myaccount-following-list-header{
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 #myaccount-following-list-content{
     display: flex;
@@ -731,20 +733,20 @@ form input,input[type="submit"]{
     justify-content: center;
     margin-top: 20px;
 }
-.not-followed input[type="submit"]{
-    background-color: #617A55;
-    color: #FFFEF9;
-    border-radius: 5px;
+input[type="submit"].not-followed{
+    background-color: #617A55 !important;
+    color: #FFFEF9 !important;
+    border-radius: 5px !important;
     height: 30px;
     border: 1px #B5B5B5 solid;
     font-size: 16px;
     font-weight: bold;    
     width: 18vw;
 }
-.followed input[type="submit"]{
-    background-color: #FFFEF9;
-    color: #617A55;
-    border-radius: 5px;
+input[type="submit"].followed{
+    background-color: #FFFEF9 !important;
+    color: #617A55 !important;
+    border-radius: 5px !important;
     height: 30px;
     border: 1px #B5B5B5 solid;
     font-size: 16px;
@@ -790,6 +792,10 @@ form input,input[type="submit"]{
     object-fit: contain;
     margin: 0px;
     box-sizing: border-box;
+}
+/* ------- login-admin.ejs ------- */
+#admin-login{
+    scale: 80%;
 }
 /* ------- login-admin.ejs ------- */
 #admin-login{
@@ -856,12 +862,13 @@ form input,input[type="submit"]{
 }
 #account-publik-followers-list-header{
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 #account-publik-followers-list-header h1{
     position: relative;
-    margin-top: 0;
+    margin: 0;
 }
 #account-publik-followers-list-content{
     display: flex;
@@ -906,12 +913,13 @@ form input,input[type="submit"]{
 }
 #account-publik-following-list-header{
     display: flex;
-    justify-content: center;
+    justify-content:space-between;
     align-items: center;
+    margin-bottom: 30px;
 }
 #account-publik-following-list-header h1{
     position: relative;
-    margin-top: 0;
+    margin: 0;
 }
 #account-publik-following-list-content{
     display: flex;
