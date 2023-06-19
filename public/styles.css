@@ -792,6 +792,9 @@ input[type="submit"].followed{
     object-fit: contain;
     margin: 0px;
     box-sizing: border-box;
+}
+/* ------- login-admin.ejs ------- */
+#admin-login{
     scale: 80%;
 }
 /* ------- login-admin.ejs ------- */

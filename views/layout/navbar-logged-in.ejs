@@ -4,15 +4,17 @@
         <hr>
         <div id="navbar-logged-in-left-feature">
             <a href="/dashboard-public"><span>Dashboard</span></a>
-            <a href="">Top 10</a>
+            <a href="/dashboard-public">Top 10</a>
         </div>
         <div id="navbar-logged-in-right-feature">
-            <h4>Search</h4>
+            <%- include('./search.ejs') %>
             <hr>
-            <pre>Welcome, </pre> <a href="./my-account"> <%= user %></a>
-            <a href="/logout">
-                <img src="../img/logout-icon.png" alt="Log out icon" id="img-logout-icon">
-            </a>
+            <p>Welcome, </p> <a href="./my-account" id="user-logged-in"> <%= user %></a>
+            <form action="/logout" method="POST">
+                <button type="submit" id="logout-button">
+                    <img src="../img/logout-icon.png" alt="Log out icon" id="img-logout-icon">
+                </button>
+            </form>            
         </div>
     </nav>
 </header>
