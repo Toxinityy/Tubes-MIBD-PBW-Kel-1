@@ -1,0 +1,26 @@
+<div id="main-content">
+    <h2>Product Details</h2>
+    <% if (products.length === 0) { %>
+        <p>No Data Available</p>
+    <% } %>
+    <% for (let productData of products) { %>
+        <div class="product" id="product<%= productData.idTas %>">
+            <!-- <p>ID: <%= //productData.idTas %></p> -->
+            <!-- <p>Color: <%= //productData.warna %></p> -->
+            <!-- <p>Dimensions: <%= //productData.panjang %> x <%= productData.lebar %> x <%= productData.tinggi %></p> -->
+            <img src="<%= productData.foto %>" alt="<%= productData.namaTas%>" class="product-search-image"> 
+            <!-- <p>Brand: <%= //productData.namaMerk %></p> -->
+            <!-- <p>Kategori : <%= //productData.namaKategori %></p> -->
+            <div class="product-search-description">
+                <h2><%= productData.namaTas %></h2>
+                <div class="product-average-counter">
+                    <h3><%= productData.averageRateValue %></h3>
+                    <p>from</p>
+                    <h4><%= productData.personCounter %> <span>Ratings</span></h4>
+                </div>
+                <p><%= productData.deskripsi %></p>
+            </div>
+        </div>
+    <% } %>
+    <%- include('./pagination.ejs') %>
+</div>

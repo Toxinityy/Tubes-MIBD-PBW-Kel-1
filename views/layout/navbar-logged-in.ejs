@@ -3,13 +3,18 @@
         <img src="../img/Ardent.png" alt="Ardent Logo" id="img-navbar-logged-in">
         <hr>
         <div id="navbar-logged-in-left-feature">
-            <a href="/"><span>Dashboard</span></a>
-            <a href="">Top 10</a>
+            <a href="/dashboard-public"><span>Dashboard</span></a>
+            <a href="/dashboard-public">Top 10</a>
         </div>
         <div id="navbar-logged-in-right-feature">
-            <h4>Search</h4>
+            <%- include('./search.ejs') %>
             <hr>
-            <p>Welcome, </p> <a href="./account-publik" id="user-logged-in"> <%= user %></a>
+            <p>Welcome, </p> <a href="./my-account" id="user-logged-in"> <%= user %></a>
+            <form action="/logout" method="POST">
+                <button type="submit" id="logout-button">
+                    <img src="../img/logout-icon.png" alt="Log out icon" id="img-logout-icon">
+                </button>
+            </form>            
         </div>
     </nav>
 </header>
