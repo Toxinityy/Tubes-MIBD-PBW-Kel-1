@@ -19,31 +19,31 @@
             <form method="POST" action="/signup">
                 <div id="signup-input-name">
                     <div id="signup-input-firstName" class="signup-form-section">
-                            <label for="first-name">First Name</label>
-                            <input type="text" id="first-name" name="firstName" placeholder="Example: User">
+                            <label for="name">First Name</label>
+                            <input type="text" name="firstName" placeholder="Example: User">
                     </div>
                     <div id="signup-input-lastName" class="signup-form-section">
-                        <label for="last-name">Last Name</label>
-                        <input type="text" id="last-name" name="lastName" placeholder="Example: User">
+                        <label for="name">Last Name</label>
+                        <input type="text" name="lastName" placeholder="Example: User">
                     </div>
                 </div>
                 <div id="signup-input-email" class="signup-form-section" >
                     <label for="email" >Email</label>
-                    <input type="email" id="email" name="email" placeholder="user@email.com">
+                    <input type="email" name="email" placeholder="user@email.com">
                     <span id = "check-signup-email-result"><%= emailProblem %></span>
                 </div>
                 <div id="signup-input-username" class="signup-form-section">
-                    <label for="username">Username</label>
-                    <input type="text" id="username" name="username" placeholder="Example: User">
+                    <label for="name">Username</label>
+                    <input type="text" name="username" placeholder="Example: User">
                     <span id = "check-signup-username-result"><%= usernameProblem %></span>
                 </div>
                 <div id="signup-input-password" class="signup-form-section">
                         <label for="password">Password</label>
-                        <input type="password" id="password" name="password">
+                        <input type="password" name="password">
                 </div>
                 <div id="signup-input-confirmpassword" class="signup-form-section">
                         <label for="confirmpassword">Confirm Password</label>
-                        <input type="password" id="confirmpassword" name="confirmpassword">
+                        <input type="password" name="confirmpassword">
                         <span id = "check-signup-password-result"><%= passwordProblem %></span>
                 </div>
                 <div id="input-signup" class="signup-form-section">

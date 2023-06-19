@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles.css">
-    <link rel="stylesheet" href="top-ten.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
@@ -13,59 +12,16 @@
 </head>
 <body>
     <%- include('./layout/navbar.ejs') %>
-    <div class="wrapper-home">
-        <div class="hero-section" id="hero-section">
-            <div id="hero-title">
-                <h1>Unlock the World of Perfect Bags</h1>
-                <p>Explore expert reviews, comparisons, and top picks from 100.000+ Users.</p>
-                <form method="GET" action="/signup">
-                    <input type="submit" value="Become Reviewer Now" />
-                </form>
-            </div>
-            <img src="../img/S_1.png" alt="Travel Backpack" id="img-hero">
+    <div class="hero-section" id="hero-section">
+        <div id="hero-title">
+            <h1>Unlock the World of Perfect Bags</h1>
+            <p>Explore expert reviews, comparisons, and top picks from 100.000+ Users.</p>
+            <button>Become Reviewer Now</button>
         </div>
+        <img src="../img/S_1.png" alt="Travel Backpack" id="img-hero">
+    </div>
+    <div class="top-ten" id="top-ten">
         
-        <%- include('./layout/top-ten.ejs') %>
-        
-       <div class="home-signup" id="home-signup">
-           <form method="POST" action="/signup">
-               <img src="../img/Rectangle 15.png" alt="Person Holding Bag" id="home-signup-image">
-               <div id="signup-wrapper">
-                    <h3>Starts for free</h3>
-                    <h1>Become A <span>Reviewer</span></h1>
-                    <div id="already-a-reviewer">
-                        <h4>Already a Reviewer?</h4>
-                        <a href="/login">Login</a>
-                    </div>
-                    <div id="home-signup-input-name" class="signup-form-section">
-                        <div class="first-name-section">
-                          <label for="first-name">First Name</label>
-                          <input type="text" name="first-name" id="first-name">
-                        </div>
-                        <div class="last-name-section">
-                          <label for="last-name">Last Name</label>
-                          <input type="text" name="last-name" id="last-name">
-                        </div>
-                      </div>
-                      
-                    <div id="signup-input-name" class="signup-form-section">
-                        <label for="username">Username</label>
-                        <input type="text" name="username" id="username">
-                    </div>
-                    <div id="signup-input-password" class="signup-form-section">
-                        <label for="password">Password</label>
-                        <input type="password" name="password" id="password">
-                    </div>
-                    <div id="signup-input-confirmpassword" class="signup-form-section">
-                        <label for="confirmpassword">Confirm Password</label>
-                        <input type="password" name="confirmpassword" id="confirmpassword">
-                    </div>
-                    <div id="go-login" class="signup-form-section">
-                        <input type="submit" name="signup" value="Sign Up" />
-                    </div>
-                </div>
-            </form>
-       </div> 
     </div>
 </body>
 </html>

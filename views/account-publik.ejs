@@ -15,7 +15,6 @@
         <title>Account Page</title>
     </head>
     <body>
-        <%- include('./layout/navbar-logged-in.ejs') %>
         <img src="../img/sand-background.jpg" alt="Sand Background" id="img-sand-background">
         <div id="bg-under-img"></div>
         <div id="account-publik-content">
@@ -35,10 +34,10 @@
                         <p id="account-publik-following-number" class="account-publik-follow-number"><%- followingsnum %></p>
                         <p id="account-publik-following-text" class="account-publik-follow-text">Following</p>
                     </div>
-                    <div id="account-publik-follow-button">
+                    <div id="account-publik-follow-button" class="<%= statusFollow %>">
                         <form method="post" id="account=publik-form-follow" action="/follow-person">
                             <input type="hidden" name="idUser" value="<%= userId %>">
-                            <input type="submit" value="<%= followText %>" id="follow-button<%= userId %>" class="<%= statusFollow %>">
+                            <input type="submit" value="<%= followText %>" id="follow-button<%= userId %>">
                         </form>
                     </div>
                 </div>
@@ -77,7 +76,6 @@
             <div id="account-publik-followers-list-box">
                 <div id="account-publik-followers-list-header">
                     <h1>Followers</h1>
-                    <button id="account-publik-follower-closeReviewFormButton" class="account-publik-close-button">x</i></button>
                 </div>
                 <div id="account-publik-followers-list-content">
                     <% for(let follower of followerList){ %>
@@ -91,7 +89,6 @@
             <div id="account-publik-following-list-box">
                 <div id="account-publik-following-list-header">
                     <h1>Following</h1>
-                    <button id="account-publik-following-closeReviewFormButton" class="account-publik-close-button">x</i></button>
                 </div>
                 <div id="account-publik-following-list-content">
                     <% for(let following of followingList){ %>
