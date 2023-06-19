@@ -55,7 +55,7 @@ app.use(
         role: 0
     })
 );
-const upload = multer({storage: fileStorage, fileFilter: fileFilter});
+const upload = multer({dest: 'uploads'});
 
 const pool = mysql.createPool({
     user: "root",
@@ -147,22 +147,6 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
         });
     });
 };
-const getBrands = (conn) => {
-    return new Promise((resolve, reject) => {
-      const query = "SELECT namaMerk AS brand FROM merk";
-      conn.query(query, (err, result) => {
-        if (err) {
-          reject(err);
-        } else {
-          const brands = [];
-          for (let row of result) {
-            brands.push(row.brand);
-          }
-          resolve(brands);
-        }
-      });
-    });
-  };
   
   const getCategories = (conn) => {
     return new Promise((resolve, reject) => {
@@ -534,17 +518,6 @@ app.get("/filter", async (req, res) => {
 app.get('/product-details?:id', productDetailsController);
 app.post("/add-review", addReviewController);
 
-// 404 handler
-app.use((req, res, next) => {
-    res.status(404).render("404", { url: req.originalUrl });
-});
-
-export { dbConnect };
-
-app.listen(PORT, () => {
-    console.log(`Server is listening on port: ${PORT}!`);
-});
-
 //dapetin brand
 const getBrands = conn => {
     return new Promise((resolve, reject) => {
@@ -656,14 +629,14 @@ app.get('/additems', async(req, res) => {
     });
 });
 
-app.get('/import', async(req, res) => {
+app.get('/import', checkMiddlewareAdminOnly , async(req, res) => {
     res.render('admin/import');
 });
 
 const csv = csvParser;
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, 'uploads'); // Change this path according to your requirements
+      cb(null, 'uploads');
     },
     filename: function (req, file, cb) {
       const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
@@ -671,10 +644,8 @@ const storage = multer.diskStorage({
     }
   });
 
-  
-const upload = multer({dest: 'uploads'});
 
-app.post('/import-csv', upload.single('csvFile'), (req, res) => {
+app.post('/import-csv', checkMiddlewareAdminOnly , upload.single('csvFile'), (req, res) => {
   const csvFilePath = req.file.path;
   const results = [];
 
@@ -793,3 +764,15 @@ app.post('/stat', async(req, res) => {
         
     })
 });
+
+// 404 handler
+app.use((req, res, next) => {
+    res.status(404).render("404", { url: req.originalUrl });
+});
+
+export { dbConnect };
+
+app.listen(PORT, () => {
+    console.log(`Server is listening on port: ${PORT}!`);
+});
+
