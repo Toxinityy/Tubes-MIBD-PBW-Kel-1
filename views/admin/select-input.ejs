@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="admin.css">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+        <title>Select Input</title>
+    </head>
+    <body>
+        <%- include('../layout/navbar-admin.ejs') %>
+        <div id="input-wrapper">
+            <h1>Select Input</h1>
+            <form method="GET" action="/setminrev">
+                <div class="sel-input-form-section">
+                    <input type="radio" name="select-input" id="setminrev">
+                    <label for="setminrev">Set Minimum Review</label>
+                </div>
+
+                <div class="sel-input-form-section">
+                    <input type="radio" name="select-input" id="setcatsub">
+                    <label for="setcatsub">Set Category & Sub Category</label>   
+                </div>
+
+                <div class="sel-input-form-section">
+                    <input type="radio" name="select-input" id="additems">
+                    <label for="additems">Add Items</label>
+                </div>
+                <div id="select-input">
+                    <input type="submit" value="Submit">
+                </div>
+                <img src="../../img/admininput.png" alt="Select Input Image" id="img-select-input">
+            </form>
+        </div>
+    </body>
+</html>

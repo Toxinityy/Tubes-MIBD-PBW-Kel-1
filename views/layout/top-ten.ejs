@@ -1,0 +1,58 @@
+<div class="top-ten" id="top-ten">
+    <h1>Top 10 Reviews</h1>
+    <div id="top-ten-container">
+        <% let i = 0; %>
+        <div id="top-1">
+            <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-1">
+            <p class="number">1</p>
+            <div id="top-1-body" class="background-top-1">
+                <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
+                    <h3><%= topten_review[i].namaTas %></h3>
+                    <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
+                    <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
+                </div>
+            </div>
+        </div>
+        <% i++; %>
+        <div id="right-wrapper">
+            <div id="right-top-wrapper">
+                <% while(i<3){ %>
+                    <div id="top-<%= i+1 %>" class="right-top-element">
+                        <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-<%= i+1 %>">
+                        <p class="number-second"><%= i+1 %></p>
+                        <div id="top-<%= i+1 %>-body">
+                            <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
+                                <h3><%= topten_review[i].namaTas %></h3>
+                                <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
+                                <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
+                            </div>
+                        </div>
+                        <% i++; %> 
+                    </div>
+                <% } %>
+            </div>
+            <div id="right-bot-wrapper">
+                <% while(i<10){ %>
+                    <div id="top-<%= i+1 %>" class="right-bot-element">
+                        <img src="<%= topten_review[i].foto %>" alt="top-<%= i+1 %>" class="background-top-<%= i+1 %>">
+                        <p><span class="number-third"><%= i+1 %></span></p>
+                        <div id="top-<%= i+1 %>-body">
+                            <div class="hidden-info" onclick="redirectToProductDetails('<%= topten_review[i].idTas %>')">
+                                <h3><%= topten_review[i].namaTas %></h3>
+                                <p>Average Rating: <%= topten_review[i].averageRateValue %></p>
+                                <p>Number of Reviews: <%= topten_review[i].personCounter %></p>
+                            </div>
+                        </div>
+                        <% i++; %> 
+                    </div>
+                <% } %>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function redirectToProductDetails(productId) {
+        window.location.href = `/product-details?id=${productId}`;
+    }
+</script>

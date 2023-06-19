@@ -1,0 +1,100 @@
+
+*{
+    font-family: 'Roboto', sans-serif;
+    background-color: #FFFEF9;
+}
+body{
+    margin: 0px;
+}
+h1{
+    font-size: 55px;
+}
+::placeholder{
+    color: 6E6E6E;
+    font-weight: lighter;
+    font-style: italic;
+}
+
+/* ------- login-admin.ejs ------- */
+.wrapper-admin{
+    display: flex;
+}
+#img-admin-login{
+    scale: 80%;
+    width: 60vw;
+    height: 100vh;
+    object-fit: cover;
+}
+#admin-login-content{
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    width: 35%;
+}
+#admin-login-content p, #admin-login-content h1{
+    margin: 3px 0px;
+}
+#admin-login-content p{
+    color: #A0A0A0;
+    font-size: 14px;    
+}
+.admin-login-form-section{
+    display: flex;
+    flex-direction: column;
+    margin: 15px 100px 15px 0px;
+}
+.admin-login-form-section label{
+    font-size: 14px;    
+    margin-bottom: 5px;
+}
+.admin-login-form-section span{
+    font-size: 10px;    
+    color: red;
+}
+form input,input[type="submit"]{
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+button, input[type="submit"]{
+    background-color: #617A55;
+    color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+}
+button:hover{
+    background-color: #495c40;
+    color: #d4d4d0;
+    transition: 0.3s;
+}
+#logout-button{
+    background-color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+    border: none;
+}
+#search-logo{
+    width: 15px;
+    border: none;
+    margin-left: 5px;
+}
+form input, input[type="submit"] {
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+#img-logout-icon {
+    height: 25px;
+    width: 25px;
+    object-fit: contain;
+}
+#navbar-search {
+    display: flex;
+}
+#navbar-search-input {
+    border: none;
+}
