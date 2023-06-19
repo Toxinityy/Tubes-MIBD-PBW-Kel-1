@@ -16,7 +16,7 @@ h1{
 }
 
 /* ------- login-admin.ejs ------- */
-.wrapper{
+.wrapper-admin{
     display: flex;
 }
 #img-admin-login{
@@ -68,4 +68,33 @@ button:hover{
     background-color: #495c40;
     color: #d4d4d0;
     transition: 0.3s;
+}
+#logout-button{
+    background-color: #FFFEF9;
+    border-radius: 5px;
+    height: 30px;
+    border: none;
+}
+#search-logo{
+    width: 15px;
+    border: none;
+    margin-left: 5px;
+}
+form input, input[type="submit"] {
+    height: 35px;
+    border-radius: 5px;
+    border: 1px #B5B5B5 solid;
+    font-size: 14px;
+    padding: 0px 10px;
+}
+#img-logout-icon {
+    height: 25px;
+    width: 25px;
+    object-fit: contain;
+}
+#navbar-search {
+    display: flex;
+}
+#navbar-search-input {
+    border: none;
 }
