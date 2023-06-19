@@ -18,7 +18,7 @@
     <form action="/setSubCategory" method="POST">
         <%- include('./admin/category.ejs') %>
         <label for="subCategory">Choose sub category</label>
-        <select id="subCategory" name="subCategory">
+        <select id="subCategory" name="subCategory"> <% if (subCategoryDisabled) { %> disabled <% } %>>
             <% subCategories.forEach(function(subCategory) { %>
                 <option value="<%= subCategory.id %>"><%= subCategory.name %></option>
             <% }); %>
@@ -27,6 +27,12 @@
         <p class="subCategory-not-found">
             <button type="button" id="addSubCategoryButton">Doesn't find your sub category?</button>
         </p>
+
+        <% if (subCategoryDisabled) { %>
+            <label for="newSubCategory">Enter new sub category</label>
+            <input type="text" id="newSubCategory" name="newSubCategory" required>
+        <% } %>
+
 
         <div id="newSubCategoriesContainer"></div>
 
@@ -48,7 +54,7 @@
             newSubCategoryButton.innerHTML = '+';
             newSubCategoryButton.addEventListener('click', function() {
                 newSubCategoryField.remove();
-                newSubCategoryButton.remove();
+                
             });
             newSubCategoriesContainer.appendChild(newSubCategoryButton);
         });
