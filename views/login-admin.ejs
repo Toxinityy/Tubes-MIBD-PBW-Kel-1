@@ -20,13 +20,16 @@
                     <div id="admin-login-email" class="admin-login-form-section">
                         <label for="email">Email</label>
                         <input type="email" name="email" id="email" pattern=".+@ardent\.com" placeholder="user@ardent.com">
+                        <span id = "check-admin-login-email-result"><%= emailProblem %></span>
                     </div>
                     <div id="admin-login-password" class="admin-login-form-section">
                         <label for="password">Password</label>
                         <input type="password" id="password" name="password">
+                        <span id = "check-admin-login-password-result"><%= passProblem %></span>
                     </div>
                     <div id="input-admin-login" class="admin-login-form-section">
                         <input type="submit" value="Log In">
+                        <span id = "check-admin-login-submit-result"><%= submitProblem %></span>
                     </div>
                 </form>
             </div>

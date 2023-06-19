@@ -59,4 +59,12 @@
           window.location.href = `/product-details?id=${productId}`;
       });
   });
+
+  const userDivs = document.querySelectorAll('.accountData');
+  userDivs.forEach(userDiv=>{
+    userDiv.addEventListener('click', ()=>{
+      const userId = userDiv.id.replace('accountData','');
+      window.location.href = `/account-publik?id=${userId}`;
+    })
+  })
 </script>
