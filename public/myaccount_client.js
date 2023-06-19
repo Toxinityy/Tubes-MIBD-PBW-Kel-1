@@ -12,6 +12,8 @@ const imageInputElement = document.getElementById('myaccount-image-input');
 const currentProfileImg = document.getElementById('img-myaccount-profil');
 const buttonCancelUpload = document.getElementById('cancel-img-upload-button');
 
+const buttonClose = document.querySelectorAll('.myaccount-close-button');
+
 followersNumber.addEventListener('click', followersClicked);
 followersText.addEventListener('click', followersClicked);
 
@@ -40,6 +42,7 @@ function followingClicked(){
 const listFollowers = document.querySelectorAll('.myaccount-followers-person-box');
 
 const listFollowing = document.querySelectorAll('.myaccount-following-person-box');
+const listTas = document.querySelectorAll('.myaccount-kotak-tas');
 
 listFollowers.forEach(followerUser => {
     followerUser.addEventListener('click', ()=>{
@@ -54,6 +57,20 @@ listFollowing.forEach(followingUser => {
         window.location.href = `/account-publik?id=${idUser}`;
     });
 });
+listTas.forEach(tasProduct=>{
+    tasProduct.addEventListener('click', ()=>{
+        const idTas = tasProduct.id.replace('myaccount-tas','');
+        window.location.href = `/product-details?id=${idTas}`;
+    })
+});
+
+buttonClose.forEach(closeBut=>{
+    closeBut.addEventListener('click', ()=>{
+        timelineContent.style.visibility = 'visible';
+        followersContent.style.visibility = 'hidden';
+        followingContent.style.visibility = 'hidden';
+    })
+})
 
 currentProfileImg.addEventListener('click', function() {
     formElement.style.visibility = "visible"
@@ -61,7 +78,7 @@ currentProfileImg.addEventListener('click', function() {
 
 buttonCancelUpload.addEventListener('click', ()=>{
     formElement.style.visibility = "hidden";
-})
+});
 
 formElement.addEventListener('submit', function(event) {
     event.preventDefault();
