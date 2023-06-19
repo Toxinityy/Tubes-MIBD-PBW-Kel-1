@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="admin.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,400;0,500;0,700;1,300&display=swap" rel="stylesheet">
+    <title>Set Sub Category</title>
+</head>
+<body>
+    <%- include('./layout/navbar.ejs') %>
+
+    <h1>Set Category & Sub Category</h1>
+
+    <form action="/setSubCategory" method="POST">
+        <%- include('./admin/category.ejs') %>
+        <label for="subCategory">Choose sub category</label>
+        <select id="subCategory" name="subCategory"> <% if (subCategoryDisabled) { %> disabled <% } %>>
+            <% subCategories.forEach(function(subCategory) { %>
+                <option value="<%= subCategory.id %>"><%= subCategory.name %></option>
+            <% }); %>
+        </select>
+
+        <p class="subCategory-not-found">
+            <button type="button" id="addSubCategoryButton">Doesn't find your sub category?</button>
+        </p>
+
+        <% if (subCategoryDisabled) { %>
+            <label for="newSubCategory">Enter new sub category</label>
+            <input type="text" id="newSubCategory" name="newSubCategory" required>
+        <% } %>
+
+
+        <div id="newSubCategoriesContainer"></div>
+
+        <a href="/input">Submit</a>
+    </form>
+
+    <script>
+        const addSubCategoryButton = document.getElementById('addSubCategoryButton');
+        const newSubCategoriesContainer = document.getElementById('newSubCategoriesContainer');
+    
+        addSubCategoryButton.addEventListener('click', function() {
+            const newSubCategoryField = document.createElement('input');
+            newSubCategoryField.type = 'text';
+            newSubCategoryField.name = `newSubCategory[]`;
+            newSubCategoriesContainer.appendChild(newSubCategoryField);
+    
+            const newSubCategoryButton = document.createElement('button');
+            newSubCategoryButton.type = 'button';
+            newSubCategoryButton.innerHTML = '+';
+            newSubCategoryButton.addEventListener('click', function() {
+                newSubCategoryField.remove();
+                
+            });
+            newSubCategoriesContainer.appendChild(newSubCategoryButton);
+        });
+    </script>
+    
+</body>
+</html>

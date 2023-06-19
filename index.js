@@ -3,6 +3,9 @@ import path from "path";
 import express from "express";
 import session from "express-session";
 import crypto from "crypto";
+
+// Test
+// import { AppAdmin } from "./admin/app.js";
 import memoryStore from 'memorystore';
 import Chart from 'chart.js/auto';
 import csvParser from "csv-parser";
@@ -64,34 +67,39 @@ const pool = mysql.createPool({
     host: "localhost",
 });
 
+// app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "ejs");
 app.use(express.urlencoded({ extended: true }));
 const staticPath = path.resolve("public");
 app.use(express.static(staticPath));
 
 const dbConnect = () => {
-    return new Promise((resolve, reject) => {
-        pool.getConnection((err, conn) => {
-            if (err) {
-                reject(err);
-            } else {
-                resolve(conn);
-            }
-        });
+  return new Promise((resolve, reject) => {
+    pool.getConnection((err, conn) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve(conn);
+      }
     });
+  });
 };
 
-const checkEmail = (conn, email)=>{
-    return new Promise((resolve, reject)=>{
-        conn.query('SELECT * FROM Publik WHERE emailPengguna = ?', [email],(err, result)=>{
-            if(err){
-                reject(err);
-            }
-            else{
-                resolve(result);
-            }
-        });
+const getBrands = (conn) => {
+  return new Promise((resolve, reject) => {
+    const query = "SELECT namaMerk AS brand FROM merk";
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const brands = [];
+        for (let row of result) {
+          brands.push(row.brand);
+        }
+        resolve(brands);
+      }
     });
+  });
 };
 
 const checkEmailAdmin = (conn, email)=>{
@@ -118,8 +126,23 @@ const checkUsername = (conn, username)=>{
             }
         });
     });
+  });
 };
 
+const checkEmail = (conn, email) => {
+  return new Promise((resolve, reject) => {
+    conn.query(
+      "SELECT * FROM Publik WHERE emailPengguna = ?",
+      [email],
+      (err, result) => {
+        if (err) {
+          reject(err);
+        } else {
+          resolve(result);
+        }
+      }
+    );
+  });
 const updateFoto = (conn, fotoPath, idPengguna)=>{
     return new Promise((resolve, reject)=>{
         conn.query('UPDATE Publik SET fotoProfile = ? WHERE id = ?', [fotoPath, idPengguna], (err, result)=>{
@@ -147,8 +170,8 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
         });
     });
 };
-  
-  const getCategories = (conn) => {
+ 
+ const getCategories = (conn) => {
     return new Promise((resolve, reject) => {
       const query = "SELECT namaKategori AS category FROM kategori";
       conn.query(query, (err, result) => {
@@ -163,7 +186,7 @@ const insertData = (conn, firstName, lastName, username, email, password)=>{
         }
       });
     });
-  };
+ };
 
 const checkMiddlewarePublicOnly = (req, res, next)=>{
     if(req.session.logged_in && req.session.role==1){
@@ -392,12 +415,45 @@ app.post("/signup", async (req, res) => {
     else{
         // pesan kesalahan
         res.render("signup", {
-            emailProblem: '',
-            usernameProblem: '',
-            passwordProblem: '',
-            signupProblem: 'Please insert all the form'
+          emailProblem: "",
+          usernameProblem: "",
+          passwordProblem: "Password does not match",
+          signupProblem: "",
         });
+      }
+    } else if (signedUpEmail.length != 0 && signedUpUsername.length == 0) {
+      //sudah ada pengguna dengan email tersebut
+      res.render("signup", {
+        emailProblem: "Email already registered",
+        usernameProblem: "",
+        passwordProblem: "",
+        signupProblem: "",
+      });
+    } else if (signedUpEmail.length == 0 && signedUpUsername.length != 0) {
+      //sudah ada pengguna dengan username tersebut
+      res.render("signup", {
+        emailProblem: "",
+        usernameProblem: "Username already exists",
+        passwordProblem: "",
+        signupProblem: "",
+      });
+    } else {
+      res.render("signup", {
+        emailProblem: "Email already registered",
+        usernameProblem: "Username already exists",
+        passwordProblem: "",
+        signupProblem: "",
+      });
     }
+  } else {
+    // pesan kesalahan
+    res.render("signup", {
+      emailProblem: "",
+      usernameProblem: "",
+      passwordProblem: "",
+      signupProblem: "Please insert all fields",
+    });
+  }
 });
 
 app.post("/login", async(req,res)=>{
@@ -436,13 +492,209 @@ app.post("/login", async(req,res)=>{
             }
         }
     }
-    else{
-        res.render("login-public",{
-            emailProblem: '',
-            passwordProblem: '',
-            loginProblem: 'Please insert all the form'
-        });
+
+app.get("/account-publik", async (req, res) => {
+  res.render("account-publik", {
+    user: req.session.username,
+  });
+});
+app.get("/filter", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const searchParams = req.query.search || "";
+    const selectedBrand = req.query.brand || "";
+    const selectedCategory = req.query.category || "";
+    const page = parseInt(req.query.page) || 1;
+    const itemsPerPage = 3;
+
+    const brands = await getBrands(conn);
+    const categories = await getCategories(conn);
+
+    const products = await getProductData(
+      conn,
+      searchParams,
+      selectedBrand,
+      selectedCategory
+    );
+    const totalProducts = products.length;
+    const totalPages = Math.ceil(totalProducts / itemsPerPage);
+
+    const accounts = await getAccountData(conn, searchParams);
+
+    const paginatedProducts = [];
+    const start = (page - 1) * itemsPerPage;
+    const end = Math.min(start + itemsPerPage, products.length);
+
+    for (let i = start; i < end; i++) {
+      paginatedProducts.push(products[i]);
     }
+
+    res.render("filter", {
+      user: req.session.username,
+      brands,
+      categories,
+      // subCategories,
+      products: paginatedProducts,
+      accounts,
+      currentPage: page,
+      totalPages: totalPages,
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).render("error", { message: "Internal Server Error" });
+  }
+});
+
+// Admin
+app.get("/input", async (req, res) => {
+  try {
+    res.status(200).render("input");
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
+});
+
+app.post("/submit", async (req, res) => {
+  try {
+    const selectedPage = req.body.page;
+
+    if (selectedPage === "minReview") {
+      res.status(200).render("minReview");
+    } else if (selectedPage === "category") {
+      res.status(200).redirect("/setCategory");
+    } else if (selectedPage === "subCategory") {
+      res.status(200).render("subCategory");
+    } else if (selectedPage === "import") {
+      res.status(200).render("import");
+    } else {
+      res.status(200).render("input");
+      // res.render("/input"); // Jika pilihan tidak valid, kembali ke halaman input
+    }
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
+});
+
+// AdminFunc
+const getData = (conn, columnQ, tableDB, whereQ, customQ) => {
+  return new Promise((resolve, reject) => {
+    // const query = `SELECT * FROM kategori WHERE idKategori = ${customQ}`;
+    const query = `SELECT ${columnQ} FROM ${tableDB} ${
+      whereQ ? `WHERE ${whereQ} = ${customQ}` : ``
+    }`;
+    conn.query(query, (err, result) => {
+      if (err) {
+        reject(err);
+      } else {
+        const data = [];
+        for (let row of result) {
+          data.push(row);
+        }
+        resolve(data);
+      }
+    });
+  });
+};
+
+//CAT & SUBCAT
+app.get("/setCategory", async (req, res) => {
+  try {
+    const conn = await dbConnect();
+    const categories = await getData(conn, "*", "kategori");
+
+    res.status(200).render("category", {
+      categories,
+    });
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
+});
+
+// Menangani submit set sub category
+app.post("/setCategory", async (req, res) => {
+  try {
+    const { category, newCategory } = req.body;
+    const subCatQ = category ? category : newCategory;
+
+    // Mendapatkan daftar sub-kategori dari database berdasarkan kategori yang dipilih sebelumnya (misalnya menggunakan query SQL SELECT)
+    const conn = await dbConnect();
+    const subCategories = newCategory
+      ? undefined
+      : await getData(conn, "*", "subkategori", "idKategori", category);
+
+    // Menyimpan ke database
+    if (newCategory) {
+      const insertCategoryQuery =
+        "INSERT INTO Kategori (namaKategori) VALUES (?)";
+
+      pool.query(insertCategoryQuery, [newCategory], function (err, result) {
+        if (err) throw err;
+        console.log(newCategory);
+        res.status(200).render("subCategory", {
+          subCatQ: subCatQ,
+          subCategories: subCategories,
+        });
+      });
+    } else {
+      res.status(200).render("subCategory", {
+        subCatQ: subCatQ,
+        subCategories: subCategories,
+      });
+    }
+
+    // console.log(subCategories)
+    // res.status(200).send("subCategories")
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
+});
+
+// Menangani submit Set Sub-Category
+app.post("/setSubCategory", async (req, res) => {
+  try {
+    const { subCategory } = req.body;
+    const newSubCategories = [];
+
+    // Memproses sub-kategori yang dipilih
+    if (subCategory) {
+      for (const key in req.body) {
+      if (key.startsWith("newSubCategory_")) {
+        const newSubCategory = req.body[key];
+        newSubCategories.push(newSubCategory);
+            }
+          }
+      // Lakukan sesuatu dengan sub-kategori yang dipilih (misalnya, menyimpannya ke database)
+      const insertQuery =
+        "INSERT INTO SubKategori (namaSubKategori) VALUES (?)";
+      pool.query(insertQuery, [subCategory], function (err, results) {
+        if (err) {
+          console.log("Error inserting sub-category:", err);
+        } else {
+          console.log("Sub-category inserted successfully");
+        
+    // Memproses sub-kategori baru
+    for (const key in req.body) {
+      if (key.startsWith("newSubCategory_")) {
+        const newSubCategory = req.body[key];
+        newSubCategories.push(newSubCategory);
+            }
+          }
+        );
+      }
+    }
+
+    // console.log(subCategory);
+
+    // res.status(200).send("subCategories");
+    res.redirect("/input");
+  } catch (err) {
+    res.status(400).send(err);
+    console.log(err);
+  }
 });
 
 app.get("/my-account", checkMiddlewarePublicOnly, render_my_account);
@@ -773,6 +1025,6 @@ app.use((req, res, next) => {
 export { dbConnect };
 
 app.listen(PORT, () => {
-    console.log(`Server is listening on port: ${PORT}!`);
+  console.log(`Server is listening on port: ${PORT}!`);
 });
 

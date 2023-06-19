@@ -1,3 +1,70 @@
+
+/* Main */
+.hidden {
+    display: none;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+    height: 90vh;
+    padding-left: 100px;
+}
+
+form > label {
+    margin-top: -50px;
+}
+
+/* Category */
+body {
+    font-family: 'Roboto', sans-serif;
+    margin: 0;
+    padding: 0;
+  }
+  
+  
+  h1 {
+    text-align: left;
+    padding-left: 100px;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    margin-top: 20px;
+    padding-left: 100px;
+  }
+  
+  label {
+    margin-bottom: 10px;
+  }
+  
+  select {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+  }
+  
+  p.category-not-found {
+    margin-top: 10px;
+  }
+  
+  button#newCategoryButton {
+    margin-top: 10px;
+  }
+  
+  input#newCategory {
+    margin-bottom: 10px;
+    width: 100%;
+    padding: 5px;
+  }
+  
+  a {
+    margin-top: 10px;
+}
 *{
     font-family: 'Roboto', sans-serif;
     background-color: #FFFEF9;
@@ -163,5 +230,3 @@ button:hover{
 }
 
 /* ------- additems.ejs ------- */
-
-
